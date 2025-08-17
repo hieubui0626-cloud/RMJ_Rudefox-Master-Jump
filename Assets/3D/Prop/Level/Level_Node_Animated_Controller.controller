@@ -58,7 +58,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: isComplete
+    m_ConditionEvent: isCompleted
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: isUnlocked
@@ -119,7 +119,7 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: isComplete
+  - m_Name: isCompleted
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0

@@ -7,13 +7,16 @@ public class PlayerController : MonoBehaviour
 
     [Header("Jump Settings")]
     public float maxForce;
-    public float maxCharge;
+    public float DistanveDivide;
+    public float forceMultiplier;
+    public float targetForce;
+    //public float maxCharge;
     public float forecAmount;
-    public float chargeSpeed;
+    //public float chargeSpeed;
 
     [Header("State")]
     public bool isGrounded;
-    public bool isCharging;
+    public bool isCharging = false;
     public bool Disableplayer;
 
     [Header("UI & Effects")]
@@ -22,19 +25,27 @@ public class PlayerController : MonoBehaviour
 
     [Header("Scene Control")]
     public float MaxcountLoadscene;
+    public SkinnedMeshRenderer meshRenderer;
 
     private float lastYposition;
     private Rigidbody rb;
     private Animator myAnimator;
-    public SkinnedMeshRenderer meshRenderer;
+    
     private Transform rudeTransform;
     private Quaternion rudeOriginalRotation;
-    public Vector3 lastSafePosition;
+    private Vector3 lastSafePosition;
     private Vector2 startTouchPos;
     private Vector2 currentTouchPos;
     private Vector3 smoothEndPos;
     private Vector3 jumpDirection;
     private Coroutine loadSceneCoroutine;
+
+
+    // ========== Force Settings ==========
+         
+    [SerializeField] private float forceLerpSpeed = 8f;  // Tốc độ lerp để cảm giác "gồng lực"
+    [SerializeField] private float minDragDistance = 1f; // Khoảng drag nhỏ nhất để tính hướng
+    
 
     private void Awake()
     {
@@ -79,23 +90,89 @@ public class PlayerController : MonoBehaviour
         bool inputHeld = InputManager.IsInputHeld();
         bool inputUp = InputManager.IsInputUp();
 
-        if (inputDown) StartCharging();
+        /*if (inputDown) StartCharging();
         else if (inputHeld) ChargeJump();
         else if (inputUp) ReleaseJump();
+        */
+
+        if (inputDown) StartCharging();
+        else if (inputHeld) DragJump();
+        else if (inputUp) ReleaseJump();
     }
+    /*  Charge force Jump
+      private void StartCharging()
+      {
+
+          isCharging = true;
+          forecAmount = 0f;
+          lineRenderer.enabled = true;
+          SetAnimatorState(isHold: true, isIdle: false);
+
+          startTouchPos = InputManager.GetInputPosition();
+
+          // Ghi lại vị trí an toàn trước khi nhảy
+
+
+          if (ReviveManager.Instance != null)
+          {
+              lastSafePosition = transform.position;
+              ReviveManager.Instance.RecordSafePosition(lastSafePosition);
+          }
+      }
+
+      private void ChargeJump()
+      {
+          forecAmount += chargeSpeed * Time.deltaTime;
+          forecAmount = Mathf.Clamp(forecAmount, 0, maxForce);
+
+          currentTouchPos = InputManager.GetInputPosition();
+          Vector2 dragVector = currentTouchPos - startTouchPos;
+
+          if (dragVector.magnitude >= 5f)
+          {
+              jumpDirection = new Vector3(dragVector.x, Mathf.Abs(dragVector.y), 0f).normalized;
+          }
+          else
+          {
+              Vector3 inputPos = currentTouchPos;
+              inputPos.z = Camera.main.transform.position.y - transform.position.y;
+              Vector3 worldPos = Camera.main.ScreenToWorldPoint(inputPos);
+              jumpDirection = new Vector3(worldPos.x - transform.position.x, 1, 0).normalized;
+          }
+
+          // Giới hạn góc xoay
+          float rawAngle = Mathf.Atan2(jumpDirection.x, Mathf.Abs(jumpDirection.y)) * Mathf.Rad2Deg;
+          float clampedAngle = Mathf.Clamp(rawAngle, -45f, 45f);
+          Quaternion targetRotation = Quaternion.Euler(0, 180 - clampedAngle, 0);
+          rudeTransform.localRotation = Quaternion.Slerp(rudeTransform.localRotation, targetRotation, Time.deltaTime * 5f);
+
+          // Cập nhật đường nhảy
+          Vector3 centerPosition = transform.position + Vector3.up;
+          Vector3 targetEndPos = centerPosition + jumpDirection * 3;
+          smoothEndPos = Vector3.Lerp(smoothEndPos, targetEndPos, Time.deltaTime * 10f);
+
+          lineRenderer.SetPosition(0, centerPosition);
+          lineRenderer.SetPosition(1, smoothEndPos);
+      }
+
+      private void ReleaseJump()
+      {
+          isCharging = false;
+          rb.AddForce(jumpDirection * forecAmount, ForceMode.Impulse);
+          lineRenderer.enabled = false;
+          isGrounded = false;
+          SetAnimatorState(isJump: true, isHold: false);
+      }
+     */
 
     private void StartCharging()
     {
-        
         isCharging = true;
         forecAmount = 0f;
         lineRenderer.enabled = true;
         SetAnimatorState(isHold: true, isIdle: false);
 
         startTouchPos = InputManager.GetInputPosition();
-
-        // Ghi lại vị trí an toàn trước khi nhảy
-        
 
         if (ReviveManager.Instance != null)
         {
@@ -104,36 +181,39 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void ChargeJump()
+    private void DragJump()
     {
-        forecAmount += chargeSpeed * Time.deltaTime;
-        forecAmount = Mathf.Clamp(forecAmount, 0, maxForce);
-
         currentTouchPos = InputManager.GetInputPosition();
-        Vector2 dragVector = currentTouchPos - startTouchPos;
 
-        if (dragVector.magnitude >= 5f)
+        // 1. Tính khoảng cách drag → targetForce
+        float dragDistance = ((currentTouchPos - startTouchPos).magnitude)/ DistanveDivide;
+        targetForce = Mathf.Clamp(dragDistance, 0, maxForce);
+
+        // 2. Lerp lực cho cảm giác mượt
+        forecAmount = Mathf.Lerp(forecAmount, targetForce, Time.deltaTime * forceLerpSpeed);
+        
+
+        // 3. Tính hướng nhảy
+        Vector2 dragVector = currentTouchPos - startTouchPos;
+        if (dragVector.magnitude >= minDragDistance)
         {
             jumpDirection = new Vector3(dragVector.x, Mathf.Abs(dragVector.y), 0f).normalized;
         }
         else
         {
-            Vector3 inputPos = currentTouchPos;
-            inputPos.z = Camera.main.transform.position.y - transform.position.y;
-            Vector3 worldPos = Camera.main.ScreenToWorldPoint(inputPos);
-            jumpDirection = new Vector3(worldPos.x - transform.position.x, 1, 0).normalized;
+            jumpDirection = Vector3.up;
         }
 
-        // Giới hạn góc xoay
+        // 4. Giới hạn góc xoay
         float rawAngle = Mathf.Atan2(jumpDirection.x, Mathf.Abs(jumpDirection.y)) * Mathf.Rad2Deg;
         float clampedAngle = Mathf.Clamp(rawAngle, -45f, 45f);
         Quaternion targetRotation = Quaternion.Euler(0, 180 - clampedAngle, 0);
         rudeTransform.localRotation = Quaternion.Slerp(rudeTransform.localRotation, targetRotation, Time.deltaTime * 5f);
 
-        // Cập nhật đường nhảy
+        // 5. LineRenderer theo lực
         Vector3 centerPosition = transform.position + Vector3.up;
-        Vector3 targetEndPos = centerPosition + jumpDirection * 3;
-        smoothEndPos = Vector3.Lerp(smoothEndPos, targetEndPos, Time.deltaTime * 10f);
+        Vector3 targetEndPos = centerPosition + jumpDirection * (forecAmount * 0.35f);
+        smoothEndPos = Vector3.Lerp(smoothEndPos, targetEndPos, Time.deltaTime * forceLerpSpeed);
 
         lineRenderer.SetPosition(0, centerPosition);
         lineRenderer.SetPosition(1, smoothEndPos);
@@ -141,11 +221,17 @@ public class PlayerController : MonoBehaviour
 
     private void ReleaseJump()
     {
+        
         isCharging = false;
         rb.AddForce(jumpDirection * forecAmount, ForceMode.Impulse);
+        Vector3 centerPosition = transform.position + Vector3.up;
+        lineRenderer.SetPosition(0, centerPosition);
+        lineRenderer.SetPosition(1, centerPosition);
         lineRenderer.enabled = false;
         isGrounded = false;
         SetAnimatorState(isJump: true, isHold: false);
+        forecAmount = 0f;
+        targetForce = 0f;
     }
 
     private void OnCollisionStay(Collision collision)
@@ -217,7 +303,8 @@ public class PlayerController : MonoBehaviour
         // Gọi UI revive nếu có và hợp lệ
         if (UIManager.Instance != null && UIManager.Instance.revivePanel != null)
         {
-            UIManager.Instance.ShowReviveOption();
+            StartCoroutine(WailTime());
+            
         }
         else
         {
@@ -259,6 +346,12 @@ public class PlayerController : MonoBehaviour
             yield return null;
         }
         onComplete?.Invoke();
+    }
+
+    IEnumerator WailTime()
+    {
+        yield return new WaitForSeconds(1f);
+        UIManager.Instance.ShowReviveOption();
     }
 
     private IEnumerator EnablePhysicsNextFrame()

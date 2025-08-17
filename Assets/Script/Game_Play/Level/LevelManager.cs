@@ -1,39 +1,62 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class LevelMapManager : MonoBehaviour
 {
-    public List<LevelNode> allLevelNodes;
+    public static LevelMapManager Instance { get; private set; }
+    public SceneList sceneToLoad;
 
-    void Start()
+
+
+    void Awake()
     {
-        List<SceneList> completed = LoadCompletedLevels();
-
-        foreach (var node in allLevelNodes)
+        if (Instance != null && Instance != this)
         {
-            node.isCompleted = completed.Contains(node.sceneToLoad);
-            node.TryUnlock(completed);
+            Destroy(gameObject); // Giữ duy nhất 1 instance
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject); // Giữ xuyên scene
+        Scene currentScene = SceneManager.GetActiveScene();
+        if (currentScene.name == "Boot_Scene")
+        {
+            
+            SceneManager.LoadScene(sceneToLoad.ToString());
+        }
+        
+    }
+
+   
+
+    /// <summary>
+    /// Đánh dấu level đã hoàn thành
+    /// </summary>
+    public static void MarkLevelComplete(SceneList scene)
+    {
+        string key = $"Level_{scene}_Completed";
+        if (PlayerPrefs.GetInt(key, 0) != 1)
+        {
+            PlayerPrefs.SetInt(key, 1);
+            PlayerPrefs.Save();
         }
     }
 
-    List<SceneList> LoadCompletedLevels()
+    /// <summary>
+    /// Lấy danh sách các level đã hoàn thành
+    /// </summary>
+    public List<SceneList> LoadCompletedLevels()
     {
-        List<SceneList> completed = new List<SceneList>();
-        foreach (var node in allLevelNodes)
+        var completed = new List<SceneList>();
+        foreach (SceneList scene in System.Enum.GetValues(typeof(SceneList)))
         {
-            string key = "Level_" + node.sceneToLoad.ToString() + "_Completed";
+            string key = $"Level_{scene}_Completed";
             if (PlayerPrefs.GetInt(key, 0) == 1)
             {
-                completed.Add(node.sceneToLoad);
+                completed.Add(scene);
             }
         }
         return completed;
-    }
-
-    public void MarkLevelComplete(SceneList scene)
-    {
-        PlayerPrefs.SetInt("Level_" + scene.ToString() + "_Completed", 1);
-        PlayerPrefs.Save();
-        Start(); // Refresh lại toàn bộ unlock
     }
 }

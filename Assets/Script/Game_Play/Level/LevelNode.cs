@@ -13,102 +13,88 @@ public class LevelNode : MonoBehaviour
     public bool isCompleted = false;
     public bool isUnlocked = false;
 
+    public Material Lock_Material;
+    public Material Unlocked_Material;
+    public Material Completed_Material;
 
-    [Header("Material States")]
-    public Material lockedMaterial;
-    public Material unlockedMaterial;
-    public Material completedMaterial;
-    private Renderer rend;
     private Camera mainCam;
-
-    Animator levelAnimatior;
-
-
+    private Animator levelAnimator;
+    private Collider myCollider;
 
     void Awake()
     {
-        rend = GetComponent<Renderer>();
         mainCam = Camera.main;
-        levelAnimatior = GetComponent<Animator>();
-
+        levelAnimator = GetComponent<Animator>();
+        myCollider = GetComponent<Collider>();
+    }
+     void Stars()
+    {
+        
     }
 
     void Update()
     {
-        
-        
-
-        
-
-        Vector3 inputPos = InputManager.GetInputPosition();
-        Ray ray = mainCam.ScreenPointToRay(inputPos);
-
-        if (Physics.Raycast(ray, out RaycastHit hit))
-        {
-            
-
-
-            if (hit.collider == GetComponent<Collider>())
-            {
-                if (InputManager.IsInputDown())
-                {
-                    Debug.Log("chon Level tiếp theo");
-                    OnSelect();
-
-                }
-                
-            }
-        }
-
         if (!isUnlocked) return;
 
+        if (InputManager.IsInputDown())
+        {
+            Vector3 inputPos = InputManager.GetInputPosition();
+            Ray ray = mainCam.ScreenPointToRay(inputPos);
 
+            if (Physics.Raycast(ray, out RaycastHit hit) && hit.collider == myCollider)
+            {
+                OnSelect();
+            }
+        }
     }
 
     public void TryUnlock(List<SceneList> completedLevels)
     {
-        if (isUnlocked || isCompleted)
-            return;
+        if (isUnlocked || isCompleted) return;
 
+        // Level đầu tiên luôn unlock nếu không có yêu cầu
         if (requiredCompletedLevels == null || requiredCompletedLevels.Count == 0)
         {
-            //isUnlocked = (sceneToLoad == SceneList.W_1_1); // Coi Level_1 là mặc định mở
+            isUnlocked = true;
         }
         else
         {
-            bool allMet = requiredCompletedLevels.All(id => completedLevels.Contains(id));
-            if (allMet)
-            {
-                
-
-                isUnlocked = true;
-                UpdateVisualState();
-            }
+            // Chỉ cần 1 trong các level chỉ định đã hoàn thành là mở
+            bool anyMet = requiredCompletedLevels.Any(id => completedLevels.Contains(id));
+            if (anyMet) isUnlocked = true;
         }
-
-        UpdateVisualState();
     }
 
     public void UpdateVisualState()
     {
-
-        if (levelAnimatior != null)
+        if (levelAnimator != null)
         {
-            Debug.Log("unlock");
-
-            levelAnimatior.SetBool("isUnlocked", isUnlocked);
-            levelAnimatior.SetBool("isCompleted", isCompleted);
+            levelAnimator.SetBool("isUnlocked", isUnlocked);
+            levelAnimator.SetBool("isCompleted", isCompleted);
+        }
+        Renderer[] childRenderers = GetComponentsInChildren<Renderer>();
+        Material targetMat = Lock_Material;
+        if (isCompleted)
+        {
+            targetMat = Completed_Material;
+        }
+        else if (isUnlocked)
+        {
+            targetMat = Unlocked_Material;
         }
 
-        // TODO: Cập nhật màu sắc / emission theo trạng thái isUnlocked, isCompleted
+        foreach (Renderer rend in childRenderers)
+        {
+            rend.material = targetMat;
+        }
+
     }
 
-    public void OnSelect()
+    private void OnSelect()
     {
-        if (!isUnlocked) return;
-
-        Debug.Log("da chon Level tiếp theo");
-
+        if (!isUnlocked) return;  // chỉ cần mở khóa là được chơi
         SceneManager.LoadScene(sceneToLoad.ToString());
+
+
     }
 }

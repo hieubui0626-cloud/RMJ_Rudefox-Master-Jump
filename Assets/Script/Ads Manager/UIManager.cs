@@ -5,6 +5,7 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
 
+    [Header("Revive UI")]
     public GameObject revivePanel;
     public Button yesButton;
     public Button noButton;
@@ -14,9 +15,6 @@ public class UIManager : MonoBehaviour
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
 
-        AdManager.Instance.ShowBanner();
-
-        // Gắn callback nút Yes
         if (yesButton != null)
         {
             yesButton.onClick.RemoveAllListeners();
@@ -24,23 +22,33 @@ public class UIManager : MonoBehaviour
             {
                 revivePanel.SetActive(false);
 
-                // Xem quảng cáo trước khi revive
-                if (AdManager.Instance != null)
+                if (Ads_Reward_Manager.Instance != null)
                 {
-                    AdManager.Instance.ShowRewardAd(() =>
-                    {
-                        ReviveManager.Instance.OnReviveConfirmed();
-                    });
+                    FindObjectOfType<Ads_Reward_Manager>().ShowRewardAd(
+                        onRewardEarned: () =>
+                        {
+                            // Xem hết → revive
+                            ReviveManager.Instance.OnReviveConfirmed();
+                        },
+                        onAdClosed: () =>
+                        {
+                            // Thoát sớm → tiếp tục chơi
+                            if (PlayerController.Instance != null)
+                            {
+                                PlayerController.Instance.Disableplayer = false;
+                                if (PlayerController.Instance.meshRenderer != null)
+                                    PlayerController.Instance.meshRenderer.enabled = true;
+                            }
+                        }
+                    );
                 }
                 else
                 {
-                    // Nếu không có AdManager, revive luôn
                     ReviveManager.Instance.OnReviveConfirmed();
                 }
             });
         }
 
-        // Gắn callback nút No
         if (noButton != null)
         {
             noButton.onClick.RemoveAllListeners();
@@ -52,27 +60,11 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    
-
-    private void OnYesClicked()
-    {
-        revivePanel.SetActive(false);
-        ReviveManager.Instance.OnReviveConfirmed();
-
-       
-    }
-
-    private void OnNoClicked()
-    {
-        revivePanel.SetActive(false);
-        GameManager.Instance.RestartLevel();
-    }
-
     public void ShowReviveOption()
     {
         if (revivePanel == null)
         {
-            Debug.LogWarning("Revive panel is missing — cannot show revive UI.");
+            Debug.LogWarning("Revive panel is missing.");
             GameManager.Instance.RestartLevel();
             return;
         }

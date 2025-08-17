@@ -75,15 +75,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxForce: 8
-  maxCharge: 0
+  DistanveDivide: 50
+  forceMultiplier: 1
+  targetForce: 0
   forecAmount: 0
-  lineRenderer: {fileID: 6939452528599648876}
-  chargeSpeed: 15
   isGrounded: 0
   isCharging: 0
-  countLoadscene: 0
-  MaxcountLoadscene: 0
   Disableplayer: 0
+  lineRenderer: {fileID: 6939452528599648876}
+  FX_Death_Prefab: {fileID: 0}
+  MaxcountLoadscene: 0
+  meshRenderer: {fileID: 0}
+  forceLerpSpeed: 5
+  minDragDistance: 1
 --- !u!120 &6939452528599648876
 LineRenderer:
   serializedVersion: 2

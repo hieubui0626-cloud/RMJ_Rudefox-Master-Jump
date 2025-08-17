@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using GoogleMobileAds.Api;
 using System;
+using UnityEngine.SceneManagement;
 
 public class AdManager : MonoBehaviour
 {
@@ -13,12 +14,20 @@ public class AdManager : MonoBehaviour
     public string bannerAdUnitId_Android = "ca-app-pub-3940256099942544/6300978111"; // Test Banner
     public string bannerAdUnitId_IOS = "ca-app-pub-3940256099942544/2934735716";
 
+    public AdPosition bannerPosition = AdPosition.Bottom;
+
     [Header("Ad Unit IDs - Rewarded")]
     public string rewardAdUnitId_Android = "ca-app-pub-3940256099942544/5224354917"; // Test Reward
     public string rewardAdUnitId_IOS = "ca-app-pub-3940256099942544/1712485313";
 
+    public SceneList sceneToLoad;
+    public bool loadMenuAfterInit = true;
+
+
     private BannerView bannerView;
     private RewardedAd rewardedAd;
+    private bool isBannerLoaded = false;
+    private bool isBannerVisible = false;
 
     private Action onRewardedAdComplete;
 
@@ -27,66 +36,134 @@ public class AdManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+
+
+            // Init AdMob
+            Scene currentScene = SceneManager.GetActiveScene();
+            MobileAds.Initialize(initStatus =>
+            {
+
+
+                // Load ads
+                LoadRewardAd();
+                InitBanner();
+                ShowBanner();
+
+
+
+                if (currentScene.name == "Boot_Scene")
+                {
+                    Debug.Log("Google Mobile Ads SDK initialized");
+                    SceneManager.LoadScene(sceneToLoad.ToString());
+                }
+
+
+                // Nhảy sang menu scene
+
+            });
+            //DontDestroyOnLoad(gameObject);
+            // Đảm bảo khi đổi scene, banner vẫn còn
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else
         {
             Destroy(gameObject);
             return;
         }
-
-        MobileAds.Initialize(initStatus =>
-        {
-            Debug.Log("Google Mobile Ads SDK initialized");
-        });
-
-        LoadRewardAd();
     }
 
+   void stars()
+    {
+        
+
+
+
+
+#if UNITY_EDITOR
+
+    SceneManager.LoadScene(sceneToLoad.ToString());
+    
+#endif
+    }
+
+
+
     #region Banner
-    public void ShowBanner(AdPosition position = AdPosition.Bottom)
+    private string GetBannerAdUnitId()
     {
 #if UNITY_ANDROID
-        string adUnitId = bannerAdUnitId_Android;
+        return bannerAdUnitId_Android;
 #elif UNITY_IOS
-        string adUnitId = bannerAdUnitId_IOS;
+        return bannerAdUnitId_IOS;
 #else
-        string adUnitId = "unexpected_platform";
+        return "unexpected_platform";
 #endif
+    }
 
-        if (bannerView != null)
-        {
-            bannerView.Show();
-            return;
-        }
+    public void InitBanner()
+    {
+        if (isBannerLoaded && bannerView != null) return;
 
-        bannerView = new BannerView(adUnitId, AdSize.Banner, position);
-        bannerView.LoadAd(new AdRequest());
+        string adUnitId = GetBannerAdUnitId();
+        bannerView = new BannerView(adUnitId, AdSize.Banner, AdPosition.Bottom);
+
+        AdRequest request = new AdRequest();
+        bannerView.LoadAd(request);
+
+        isBannerLoaded = true;
+        Debug.Log("[AdManager] Banner loaded.");
+
+    }
+
+    public void ShowBanner()
+    {
+        if (bannerView == null)
+            InitBanner();
+
+        bannerView?.Show();
+        isBannerVisible = true;
+        Debug.Log("[AdManager] Banner hiển thị.");
     }
 
     public void HideBanner()
     {
         bannerView?.Hide();
+        isBannerVisible = false;
+        Debug.Log("[AdManager] Banner ẩn.");
     }
 
-    public void DestroyBanner()
+    public bool IsBannerVisible()
     {
-        bannerView?.Destroy();
-        bannerView = null;
+        return isBannerVisible;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Nếu banner mất khi load scene → khởi tạo lại
+        if (bannerView == null)
+        {
+            Debug.LogWarning("[AdManager] Banner bị mất khi chuyển scene → reload lại.");
+            InitBanner();
+            if (isBannerVisible) ShowBanner();
+        }
     }
     #endregion
 
     #region Rewarded
-    public void LoadRewardAd()
+    private string GetRewardAdUnitId()
     {
 #if UNITY_ANDROID
-        string adUnitId = rewardAdUnitId_Android;
+        return rewardAdUnitId_Android;
 #elif UNITY_IOS
-        string adUnitId = rewardAdUnitId_IOS;
+        return rewardAdUnitId_IOS;
 #else
-        string adUnitId = "unexpected_platform";
+        return "unexpected_platform";
 #endif
+    }
 
+    public void LoadRewardAd()
+    {
+        string adUnitId = GetRewardAdUnitId();
         Debug.Log("Loading rewarded ad...");
 
         RewardedAd.Load(adUnitId, new AdRequest(), (RewardedAd ad, LoadAdError error) =>
@@ -102,25 +179,36 @@ public class AdManager : MonoBehaviour
         });
     }
 
-    public void ShowRewardAd(Action onComplete)
+    public void ShowRewardAd(Action onRewardEarned, Action onAdClosed)
     {
         if (rewardedAd != null)
         {
+            rewardedAd.OnAdFullScreenContentClosed += () =>
+            {
+                Debug.Log("Reward Ad đã đóng");
+                onAdClosed?.Invoke();
+                LoadRewardAd();
+            };
+
+            rewardedAd.OnAdFullScreenContentFailed += (AdError error) =>
+            {
+                Debug.LogWarning("Reward Ad đóng do lỗi: " + error);
+                onAdClosed?.Invoke();
+                LoadRewardAd();
+            };
+
             rewardedAd.Show((Reward reward) =>
             {
                 Debug.Log($"User earned reward: {reward.Type} - {reward.Amount}");
-                onComplete?.Invoke();
-                LoadRewardAd(); // Load lại quảng cáo sau khi xem
+                onRewardEarned?.Invoke();
             });
         }
         else
         {
-            Debug.LogWarning("Rewarded ad not ready, restart level");
-            GameManager.Instance.RestartLevel();
+            Debug.LogWarning("Rewarded ad not ready.");
+            onAdClosed?.Invoke();
+            LoadRewardAd();
         }
     }
-
-
-
     #endregion
 }

@@ -42,7 +42,7 @@ Material:
     - _QueueOffset: 0
     - _Smoothness: 0.51
     m_Colors:
-    - _Press_Button_Color: {r: 0.9811321, g: 0.60534, b: 0.97580165, a: 0}
+    - _Press_Button_Color: {r: 0.4528302, g: 0, b: 0.4528302, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &1142833456138652005
 MonoBehaviour:

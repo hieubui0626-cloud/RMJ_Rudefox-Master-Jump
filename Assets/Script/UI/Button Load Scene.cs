@@ -1,44 +1,42 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using System.Collections;
 
 
 public class Buttonloadscene : MonoBehaviour
 {
-    public SceneList sceneToLoad;
-
-
-    private Camera mainCam;
+    public SceneList sceneStart;
+    
+    public GameObject ButtonStart;
+    public GameObject ButtonSignOut;
 
     private void Start()
     {
-        mainCam = Camera.main;
+        ButtonStart.SetActive(true);
     }
-
-    private void Update()
+    public void loadsceneStart()
     {
-        Ray ray = mainCam.ScreenPointToRay(InputManager.GetInputPosition());
-
-        if (Physics.Raycast(ray, out RaycastHit hit))
-        {
-            
-            //GetComponent<Renderer>().material.color = Color.yellow;
-            if (hit.collider.gameObject == gameObject)
-            {
-                if (InputManager.IsInputDown())
-                {
-                    SceneManager.LoadScene(sceneToLoad.ToString());
-
-
-                }
-                
-
-            }
-        }
-        else
-        {
-            //GetComponent<Renderer>().material.color = Color.white;
-        }
-        
+        LevelTransition.Instance.EndTransition();
+        ButtonStart.SetActive(false);
+        ButtonSignOut.SetActive(false);
+        StartCoroutine(StartWailTime());
     }
+
+    public void loadsceneSignOut()
+    {
+        GoogleFirebaseAuth.Instance.SignOut();
+    }
+
+
+
+
+    IEnumerator StartWailTime()
+    {
+
+        yield return new WaitForSeconds(1f);
+        SceneManager.LoadScene(sceneStart.ToString());
+    }
+
+    
+
 }

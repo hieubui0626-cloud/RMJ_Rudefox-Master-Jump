@@ -1,0 +1,54 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\soft ware\\Unity\\RMJ\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{61D1B1A0-9966-1EE9-9C9F-C16C57A38AF7}|Assembly-CSharp.csproj|D:\\soft ware\\Unity\\RMJ\\assets\\script\\sever manager\\googlefirebaseauth.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{61D1B1A0-9966-1EE9-9C9F-C16C57A38AF7}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\sever manager\\googlefirebaseauth.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{61D1B1A0-9966-1EE9-9C9F-C16C57A38AF7}|Assembly-CSharp.csproj|d:\\soft ware\\unity\\rmj\\assets\\script\\game_play\\level\\boots_level.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{61D1B1A0-9966-1EE9-9C9F-C16C57A38AF7}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\game_play\\level\\boots_level.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Boots_Level.cs",
+              "DocumentMoniker": "D:\\soft ware\\Unity\\RMJ\\Assets\\Script\\Game_Play\\Level\\Boots_Level.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\Game_Play\\Level\\Boots_Level.cs",
+              "ToolTip": "D:\\soft ware\\Unity\\RMJ\\Assets\\Script\\Game_Play\\Level\\Boots_Level.cs",
+              "RelativeToolTip": "Assets\\Script\\Game_Play\\Level\\Boots_Level.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAQwCkAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-21T14:28:52.981Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "GoogleFirebaseAuth.cs",
+              "DocumentMoniker": "D:\\soft ware\\Unity\\RMJ\\Assets\\Script\\Sever Manager\\GoogleFirebaseAuth.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\Sever Manager\\GoogleFirebaseAuth.cs",
+              "ToolTip": "D:\\soft ware\\Unity\\RMJ\\Assets\\Script\\Sever Manager\\GoogleFirebaseAuth.cs",
+              "RelativeToolTip": "Assets\\Script\\Sever Manager\\GoogleFirebaseAuth.cs",
+              "ViewState": "AgIAAJIAAAAAAAAAAAAvwKoAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-21T14:16:49.269Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

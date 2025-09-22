@@ -1,49 +1,66 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using GoogleMobileAds.Api;
 
-
-public class Ads_Banner_Manager : MonoBehaviour
+public class AdsBannerManager : MonoBehaviour
 {
-    public static Ads_Banner_Manager Instance;
-    public string bannerAdUnitId_Android = "ca-app-pub-3940256099942544/6300978111";
-    public string bannerAdUnitId_IOS = "ca-app-pub-3940256099942544/2934735716";
-    public AdPosition bannerPosition = AdPosition.Bottom;
-    private string GetBannerAdUnitId()
-    {
-#if UNITY_ANDROID
-        return bannerAdUnitId_Android;
-#elif UNITY_IOS
-        return bannerAdUnitId_IOS;
-#else
-        return "unexpected_platform";
-#endif
-    }
+    public static AdsBannerManager Instance;
+
+    [Header("Switch Test / Real Ads")]
+    public bool useTestAds = true; // ✅ Chỉ chỉnh ở đây 1 lần cho toàn project
+
+    // Test IDs
+    private string testBannerId_Android = "ca-app-pub-3940256099942544/6300978111";
+    private string testBannerId_IOS = "ca-app-pub-3940256099942544/2934735716";
+
+    // Real IDs (gắn từ AdMob của bạn)
+    [Header("Real Ad Unit IDs")]
+    public string realBannerId_Android = "ca-app-pub-3940256099942544/6300978111";
+    public string realBannerId_IOS = "ca-app-pub-3940256099942544/2934735716";
 
     private BannerView bannerView;
 
-    void Start()
+    void Awake()
     {
-        string adUnitId = GetBannerAdUnitId();
-        bannerView = new BannerView(adUnitId, AdSize.Banner, bannerPosition);
-
-        bannerView.OnBannerAdLoaded += () =>
+        if (Instance != null && Instance != this)
         {
-            Debug.Log("[SceneBanner] Banner loaded for scene " + gameObject.scene.name);
-            bannerView.Show();
-        };
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
 
-        bannerView.OnBannerAdLoadFailed += (LoadAdError error) =>
-        {
-            Debug.LogError("[SceneBanner] Failed to load banner: " + error);
-        };
-
-        bannerView.LoadAd(new AdRequest());
+        
     }
 
-    void OnDestroy()
+    private void Start()
     {
-        bannerView?.Destroy();
+        MobileAds.Initialize(initStatus => { });
+    }
+
+    public void ShowBanner(AdPosition position = AdPosition.Bottom)
+    {
+        if (bannerView != null) bannerView.Destroy();
+
+        string adUnitId = GetBannerAdUnitId();
+        bannerView = new BannerView(adUnitId, AdSize.Banner, position);
+
+        AdRequest request = new AdRequest();
+        bannerView.LoadAd(request);
+    }
+
+    public void HideBanner()
+    {
+        bannerView?.Hide();
+    }
+
+    private string GetBannerAdUnitId()
+    {
+#if UNITY_ANDROID
+        return useTestAds ? testBannerId_Android : realBannerId_Android;
+#elif UNITY_IOS
+        return useTestAds ? testBannerId_IOS : realBannerId_IOS;
+#else
+        return "unexpected_platform";
+#endif
     }
 }

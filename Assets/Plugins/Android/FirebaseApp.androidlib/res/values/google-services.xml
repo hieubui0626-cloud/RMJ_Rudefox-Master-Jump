@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/firebase_database_url,@string/gcm_defaultSenderId,@string/google_storage_bucket,@string/project_id,@string/google_api_key,@string/google_crash_reporting_api_key,@string/google_app_id,@string/default_android_client_id,@string/default_web_client_id">
+  <string name="firebase_database_url" translatable="false">https://rudefox-master-jump-default-rtdb.firebaseio.com</string>
+  <string name="gcm_defaultSenderId" translatable="false">870980917346</string>
+  <string name="google_storage_bucket" translatable="false">rudefox-master-jump.firebasestorage.app</string>
+  <string name="project_id" translatable="false">rudefox-master-jump</string>
+  <string name="google_api_key" translatable="false">AIzaSyB7B-7mICRq-aMZF_r9sgGZHjOjmevg5E0</string>
+  <string name="google_crash_reporting_api_key" translatable="false">AIzaSyB7B-7mICRq-aMZF_r9sgGZHjOjmevg5E0</string>
+  <string name="google_app_id" translatable="false">1:870980917346:android:7d5247ad4ac5db3bfbd93b</string>
+  <string name="default_android_client_id" translatable="false">870980917346-labml2jq3t5mvd0p100p69kd3nlb2r16.apps.googleusercontent.com</string>
+  <string name="default_web_client_id" translatable="false">870980917346-ur3o530eo7olt3o30m91gfqnq1ebgall.apps.googleusercontent.com</string>
+</resources>

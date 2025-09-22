@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "870980917346",
+    "firebase_url": "https://rudefox-master-jump-default-rtdb.firebaseio.com",
+    "project_id": "rudefox-master-jump",
+    "storage_bucket": "rudefox-master-jump.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:870980917346:android:7d5247ad4ac5db3bfbd93b",
+        "android_client_info": {
+          "package_name": "com.Kizzul.RMJ"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "870980917346-labml2jq3t5mvd0p100p69kd3nlb2r16.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.Kizzul.RMJ",
+            "certificate_hash": "88a8e2ba971301237b86f803559d9f4b44af793e"
+          }
+        },
+        {
+          "client_id": "870980917346-ur3o530eo7olt3o30m91gfqnq1ebgall.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7B-7mICRq-aMZF_r9sgGZHjOjmevg5E0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "870980917346-ur3o530eo7olt3o30m91gfqnq1ebgall.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

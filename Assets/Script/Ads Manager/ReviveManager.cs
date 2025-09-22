@@ -15,7 +15,7 @@ public class ReviveManager : MonoBehaviour
 
     public void RecordSafePosition(Vector3 position)
     {
-        lastSafePosition = position;
+        lastSafePosition = position + new Vector3(0, 1, 0);
     }
 
     public bool HasRevived()

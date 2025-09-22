@@ -22,9 +22,9 @@ public class UIManager : MonoBehaviour
             {
                 revivePanel.SetActive(false);
 
-                if (Ads_Reward_Manager.Instance != null)
+                if (Ads_Manager.Instance != null)
                 {
-                    FindObjectOfType<Ads_Reward_Manager>().ShowRewardAd(
+                    FindObjectOfType<Ads_Manager>().ShowRewardAd(
                         onRewardEarned: () =>
                         {
                             // Xem hết → revive

@@ -12,7 +12,14 @@ public class PlayerController : MonoBehaviour
     public float targetForce;
     //public float maxCharge;
     public float forecAmount;
-    //public float chargeSpeed;
+    public int GroundCount;
+    public int GroundCountThreshold;
+
+    [Header("Sound Setting")]
+    public AudioClip SFX_Hold;
+    public AudioClip SFX_Win;
+    public AudioClip SFX_Trap;
+    public AudioClip SFX_Jump;
 
     [Header("State")]
     public bool isGrounded;
@@ -30,7 +37,7 @@ public class PlayerController : MonoBehaviour
     private float lastYposition;
     private Rigidbody rb;
     private Animator myAnimator;
-    
+
     private Transform rudeTransform;
     private Quaternion rudeOriginalRotation;
     private Vector3 lastSafePosition;
@@ -39,13 +46,14 @@ public class PlayerController : MonoBehaviour
     private Vector3 smoothEndPos;
     private Vector3 jumpDirection;
     private Coroutine loadSceneCoroutine;
+    private AudioSource audioSource;
 
 
     // ========== Force Settings ==========
-         
+
     [SerializeField] private float forceLerpSpeed = 8f;  // Tốc độ lerp để cảm giác "gồng lực"
     [SerializeField] private float minDragDistance = 1f; // Khoảng drag nhỏ nhất để tính hướng
-    
+
 
     private void Awake()
     {
@@ -59,6 +67,11 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         lastYposition = transform.position.y;
 
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
         // Cache Rude & Animator
         rudeTransform = transform.Find("Rude");
         if (rudeTransform != null)
@@ -84,21 +97,29 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (!isGrounded || Disableplayer) return;
+        if (isGrounded && !Disableplayer)
+        {
+            bool inputDown = InputManager.IsInputDown();
+            bool inputHeld = InputManager.IsInputHeld();
 
-        bool inputDown = InputManager.IsInputDown();
-        bool inputHeld = InputManager.IsInputHeld();
+            if (inputDown)
+            {
+                StartCharging();
+            }
+            else if (inputHeld && isCharging)
+            {
+                DragJump();
+            }
+        }
+
+        // luôn check inputUp để tránh miss
         bool inputUp = InputManager.IsInputUp();
-
-        /*if (inputDown) StartCharging();
-        else if (inputHeld) ChargeJump();
-        else if (inputUp) ReleaseJump();
-        */
-
-        if (inputDown) StartCharging();
-        else if (inputHeld) DragJump();
-        else if (inputUp) ReleaseJump();
+        if (inputUp && isCharging && !Disableplayer)
+        {
+            ReleaseJump();
+        }
     }
+
     /*  Charge force Jump
       private void StartCharging()
       {
@@ -167,12 +188,15 @@ public class PlayerController : MonoBehaviour
 
     private void StartCharging()
     {
+        
         isCharging = true;
         forecAmount = 0f;
         lineRenderer.enabled = true;
-        SetAnimatorState(isHold: true, isIdle: false);
+        SetAnimatorState(isHold: true, isIdle: false, isJump: false);
 
         startTouchPos = InputManager.GetInputPosition();
+
+        audioSource.PlayOneShot(SFX_Hold);
 
         if (ReviveManager.Instance != null)
         {
@@ -186,12 +210,12 @@ public class PlayerController : MonoBehaviour
         currentTouchPos = InputManager.GetInputPosition();
 
         // 1. Tính khoảng cách drag → targetForce
-        float dragDistance = ((currentTouchPos - startTouchPos).magnitude)/ DistanveDivide;
+        float dragDistance = ((currentTouchPos - startTouchPos).magnitude) / DistanveDivide;
         targetForce = Mathf.Clamp(dragDistance, 0, maxForce);
 
         // 2. Lerp lực cho cảm giác mượt
         forecAmount = Mathf.Lerp(forecAmount, targetForce, Time.deltaTime * forceLerpSpeed);
-        
+
 
         // 3. Tính hướng nhảy
         Vector2 dragVector = currentTouchPos - startTouchPos;
@@ -221,50 +245,80 @@ public class PlayerController : MonoBehaviour
 
     private void ReleaseJump()
     {
-        
+        if (Disableplayer) return; // tránh bug gọi khi chết
+
         isCharging = false;
         rb.AddForce(jumpDirection * forecAmount, ForceMode.Impulse);
-        Vector3 centerPosition = transform.position + Vector3.up;
-        lineRenderer.SetPosition(0, centerPosition);
-        lineRenderer.SetPosition(1, centerPosition);
+
+        audioSource.PlayOneShot(SFX_Jump);
+        // reset line
         lineRenderer.enabled = false;
-        isGrounded = false;
-        SetAnimatorState(isJump: true, isHold: false);
+        lineRenderer.SetPosition(0, transform.position);
+        lineRenderer.SetPosition(1, transform.position);
+
+        // reset force
         forecAmount = 0f;
         targetForce = 0f;
+
+        SetAnimatorState(isJump: true, isHold: false, isIdle: false);
     }
+
+
 
     private void OnCollisionStay(Collision collision)
     {
-        SetAnimatorState(isIdle: true, isJump: false);
-        isGrounded = true;
+        if (collision.collider.CompareTag("Trap"))
+        {
+            
+            HandleTrapCollision();
+            return;
+        }
+
+        // grounded detection an toàn hơn
+        if (collision.collider.CompareTag("Ground"))
+        {
+            isGrounded = true;
+        }
 
         if (rudeTransform != null && !isCharging)
         {
-            rudeTransform.localRotation = Quaternion.Slerp(rudeTransform.localRotation, rudeOriginalRotation, Time.deltaTime * 10f);
+            rudeTransform.localRotation = Quaternion.Slerp(
+                rudeTransform.localRotation,
+                rudeOriginalRotation,
+                Time.deltaTime * 10f
+            );
         }
 
-        if (collision.collider.CompareTag("Trap"))
-        {
-            HandleTrapCollision();
-        }
-    }
+        SetAnimatorState(isIdle: true, isJump: false);
+    }   
 
     private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Goal"))
         {
+            
             HandleGoalTrigger();
+        }
+        
+    }
+    void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.CompareTag("Ground"))
+        {
+            FindObjectOfType<Tutorial_Manager>()?.PlayerLanded();
         }
     }
 
     private void OnCollisionExit(Collision collision)
     {
-        SetAnimatorState(isIdle: false, isJump: true);
-        isGrounded = false;
+        if (collision.collider.CompareTag("Ground"))
+        {
+            isGrounded = false;
+            SetAnimatorState(isJump: true, isHold: false, isIdle: false);
+        }
     }
 
-    public bool IsGrounded() => isGrounded;
+
 
     public void ReviveAt(Vector3 position)
     {
@@ -273,12 +327,18 @@ public class PlayerController : MonoBehaviour
 
         // Reset Rigidbody
         rb.isKinematic = true;
-        //rb.velocity = Vector3.zero;
-        //rb.angularVelocity = Vector3.zero;
-        //rb.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
 
-        // Bật mesh và điều khiển
+        // Reset gameplay state
         Disableplayer = false;
+        isGrounded = true;
+        isCharging = false;
+        forecAmount = 0f;
+        targetForce = 0f;
+
+        // Reset line renderer
+        if (lineRenderer != null) lineRenderer.enabled = false;
+
+        // Reset mesh
         if (meshRenderer != null) meshRenderer.enabled = true;
 
         // Animator về idle
@@ -289,10 +349,12 @@ public class PlayerController : MonoBehaviour
     }
 
 
+
     private void HandleTrapCollision()
     {
         if (Disableplayer) return;
 
+        audioSource.PlayOneShot(SFX_Trap);
         // FX chết
         Instantiate(FX_Death_Prefab, transform.position + Vector3.up, Quaternion.identity);
 
@@ -304,7 +366,7 @@ public class PlayerController : MonoBehaviour
         if (UIManager.Instance != null && UIManager.Instance.revivePanel != null)
         {
             StartCoroutine(WailTime());
-            
+
         }
         else
         {
@@ -325,14 +387,20 @@ public class PlayerController : MonoBehaviour
 
     private void HandleGoalTrigger()
     {
-        Disableplayer = true;
+        
+        if(!Disableplayer)
+        {
+            audioSource.PlayOneShot(SFX_Win);
+            Disableplayer = true;
+        }
+        
         Debug.Log("Chạm đích!");
-
+        LevelTransition.Instance.EndTransition();
         if (loadSceneCoroutine == null)
         {
             loadSceneCoroutine = StartCoroutine(LoadSceneAfterDelay(() =>
             {
-                GameManager.Instance.LoadNextLevel();
+                GameManager.Instance.CompleteCheck();
             }));
         }
     }
@@ -365,6 +433,6 @@ public class PlayerController : MonoBehaviour
         if (myAnimator == null) return;
         if (isHold.HasValue) myAnimator.SetBool("isHold", isHold.Value);
         if (isJump.HasValue) myAnimator.SetBool("isJump", isJump.Value);
-        if (isIdle.HasValue) myAnimator.SetBool("isIdel", isIdle.Value);
+        if (isIdle.HasValue) myAnimator.SetBool("isIdle", isIdle.Value); // sửa "isIdel" -> "isIdle"
     }
 }

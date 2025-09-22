@@ -13,13 +13,14 @@ public class LevelNodeListManager : MonoBehaviour
 
     public void RefreshNodeStates()
     {
-        List<SceneList> completedLevels = LevelMapManager.Instance.LoadCompletedLevels();
-
-        foreach (var node in allLevelNodes)
+        LevelMapManager.Instance.LoadCompletedLevels((completedLevels) =>
         {
-            node.isCompleted = completedLevels.Contains(node.sceneToLoad);
-            node.TryUnlock(completedLevels);
-            node.UpdateVisualState();
-        }
+            foreach (var node in allLevelNodes)
+            {
+                node.isCompleted = completedLevels.Contains(node.sceneToLoad);
+                node.TryUnlock(completedLevels);
+                node.UpdateVisualState();
+            }
+        });
     }
 }

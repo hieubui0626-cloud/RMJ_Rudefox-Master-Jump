@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class LevelNode : MonoBehaviour
 {
@@ -17,9 +21,16 @@ public class LevelNode : MonoBehaviour
     public Material Unlocked_Material;
     public Material Completed_Material;
 
+    [Header("UI")]
+    public TextMeshPro timeText; // Gán TextMeshPro 3D dưới node
+
     private Camera mainCam;
     private Animator levelAnimator;
     private Collider myCollider;
+
+    [Header("Custom Render Objects")]
+    public GameObject objectA; // Gán trong Inspector
+    public GameObject objectB; // Gán trong Inspector
 
     void Awake()
     {
@@ -27,14 +38,15 @@ public class LevelNode : MonoBehaviour
         levelAnimator = GetComponent<Animator>();
         myCollider = GetComponent<Collider>();
     }
-     void Stars()
+
+    private void OnEnable()
     {
-        
+        LoadBestTime();
     }
 
     void Update()
     {
-        if (!isUnlocked) return;
+        if (!isUnlocked && !isCompleted) return;
 
         if (InputManager.IsInputDown())
         {
@@ -65,6 +77,8 @@ public class LevelNode : MonoBehaviour
         }
     }
 
+    
+
     public void UpdateVisualState()
     {
         if (levelAnimator != null)
@@ -72,7 +86,7 @@ public class LevelNode : MonoBehaviour
             levelAnimator.SetBool("isUnlocked", isUnlocked);
             levelAnimator.SetBool("isCompleted", isCompleted);
         }
-        Renderer[] childRenderers = GetComponentsInChildren<Renderer>();
+
         Material targetMat = Lock_Material;
         if (isCompleted)
         {
@@ -83,18 +97,70 @@ public class LevelNode : MonoBehaviour
             targetMat = Unlocked_Material;
         }
 
-        foreach (Renderer rend in childRenderers)
+        // Gán cho objectA
+        if (objectA != null)
         {
-            rend.material = targetMat;
+            Renderer rendA = objectA.GetComponent<Renderer>();
+            if (rendA != null) rendA.material = targetMat;
         }
 
+        // Gán cho objectB
+        if (objectB != null)
+        {
+            Renderer rendB = objectB.GetComponent<Renderer>();
+            if (rendB != null) rendB.material = targetMat;
+        }
     }
 
     private void OnSelect()
     {
-        if (!isUnlocked) return;  // chỉ cần mở khóa là được chơi
-        SceneManager.LoadScene(sceneToLoad.ToString());
-
-
+        if (isUnlocked || isCompleted)
+        {
+            LevelTransition.Instance.EndTransition();
+            StartCoroutine(WailTime());
+        }
     }
+
+    IEnumerator WailTime()
+    {
+        yield return new WaitForSeconds(1f);
+        //SceneManager.LoadScene(sceneToLoad.ToString());
+        string address = sceneToLoad.ToString();
+        Addressables.LoadSceneAsync(address, LoadSceneMode.Single, true);
+    }
+
+    /*
+    private void LoadBestTime()
+    {
+        string key = "BestTime_" + sceneToLoad.ToString();
+        if (PlayerPrefs.HasKey(key) && timeText != null)
+        {
+            float bestTime = PlayerPrefs.GetFloat(key);
+            int minutes = Mathf.FloorToInt(bestTime / 60);
+            float seconds = bestTime % 60;
+            timeText.text = $"{minutes:00}:{seconds:00.00}";
+        }
+        else if (timeText != null)
+        {
+            timeText.text = "--:--.--";
+        }
+    }
+    */
+    private void LoadBestTime()
+    {
+        FirebaseManager.Instance.LoadBestTime(sceneToLoad.ToString(), (bestTime) =>
+        {
+            if (bestTime >= 0 && timeText != null)
+            {
+                int minutes = Mathf.FloorToInt(bestTime / 60);
+                float seconds = bestTime % 60;
+                timeText.text = $"{minutes:00}:{seconds:00.00}";
+            }
+            else if (timeText != null)
+            {
+                timeText.text = "--:--.--";
+            }
+        });
+    }
+
 }

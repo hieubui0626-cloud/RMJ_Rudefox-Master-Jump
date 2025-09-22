@@ -5,11 +5,13 @@ TagManager:
   serializedVersion: 2
   tags:
   - Trap
+  - Goal
+  - Ground
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - groundLayer
   - Water
   - UI
   - PP

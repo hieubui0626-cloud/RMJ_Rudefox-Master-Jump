@@ -41,3 +41,8 @@ sysinfo.txt
 [Ll]ibrary/
 [Tt]emp/
 [Oo]bj/
+
+
+#package
+Assets/Firebase/Plugins/x86_64/*.so
+Assets/Firebase/Plugins/x86_64/*.bundle

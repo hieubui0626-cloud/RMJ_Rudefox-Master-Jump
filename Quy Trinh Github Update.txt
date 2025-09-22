@@ -1,3 +1,0 @@
-git add .
-git commit -m "First commit - push Unity project"
-git push

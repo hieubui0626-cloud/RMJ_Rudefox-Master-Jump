@@ -27,6 +27,8 @@ ExportedObj/
 *.mdb
 *.opendb
 *.VC.db
+*.So
+*.bundle
 
 # Unity crash reports
 sysinfo.txt

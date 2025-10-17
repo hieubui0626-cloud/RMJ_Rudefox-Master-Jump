@@ -3,45 +3,39 @@
     "m_SelectedProcess": {
         "deviceId": "R58W20K5EHV",
         "name": "com.Kizzul.RMJ",
-        "processId": 8818,
+        "processId": 32367,
         "exited": false
     },
     "m_SelectedPriority": 4,
     "m_KnownProcessesForSerialization": [
         {
             "deviceId": "R58W20K5EHV",
-            "name": "com.sec.android.app.launcher",
-            "processId": 2461,
-            "exited": false
-        },
-        {
-            "deviceId": "R58W20K5EHV",
             "name": "com.Kizzul.RMJ",
-            "processId": 14502,
+            "processId": 25110,
             "exited": true
         },
         {
             "deviceId": "R58W20K5EHV",
             "name": "com.Kizzul.RMJ",
-            "processId": 16451,
+            "processId": 5301,
             "exited": true
         },
         {
             "deviceId": "R58W20K5EHV",
             "name": "com.Kizzul.RMJ",
-            "processId": 32178,
+            "processId": 24960,
             "exited": true
         },
         {
             "deviceId": "R58W20K5EHV",
             "name": "com.Kizzul.RMJ",
-            "processId": 4555,
+            "processId": 28777,
             "exited": true
         },
         {
             "deviceId": "R58W20K5EHV",
             "name": "com.Kizzul.RMJ",
-            "processId": 8818,
+            "processId": 32367,
             "exited": false
         }
     ],

@@ -17,6 +17,13 @@ public class DragCamera : MonoBehaviour
     void Start()
     {
         cam = Camera.main;
+        if (PlayerPrefs.HasKey("Levelmap_CamX") && PlayerPrefs.HasKey("Levelmap_CamY") && PlayerPrefs.HasKey("Levelmap_CamZ"))
+        {
+            float xPos = PlayerPrefs.GetFloat("Levelmap_CamX");
+            float yPos = PlayerPrefs.GetFloat("Levelmap_CamY");
+            float zPos = PlayerPrefs.GetFloat("Levelmap_CamZ");
+            cam.transform.position = new Vector3(xPos, yPos, zPos);
+        }
     }
 
     void Update()
@@ -37,6 +44,10 @@ public class DragCamera : MonoBehaviour
             ClampCameraPosition();
 
             lastInputPosition = currentInputPosition;
+
+            PlayerPrefs.SetFloat("Levelmap_CamX", cam.transform.position.x);
+            PlayerPrefs.SetFloat("Levelmap_CamY", cam.transform.position.y);
+            PlayerPrefs.SetFloat("Levelmap_CamZ", cam.transform.position.z);
         }
         else if (InputManager.IsInputUp())
         {

@@ -9,16 +9,23 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    [Header("Scene Control")]
     public SceneList sceneToLoad;
     public SceneList sceneToReset;
     public SceneList sceneToUndo;
 
     [Header("Timer Settings")]
-    private float levelTimer = 0f;
-    private bool isTiming = false;
+    public float levelTimer = 0f;
+    public bool is_Timing = false;
     public TextMeshProUGUI timerText; // Gán trong Canvas UI
     public TextMeshProUGUI CompletePanelTimeText;
     public GameObject CompletePanel;
+
+    [Header("Token System")]
+    public int currentLevelTokens = 0; // Token nhặt trong level hiện tại
+    public TextMeshProUGUI tokenText;  // Gán UI trong Canvas để hiển thị
+    public TextMeshProUGUI totalTokenText; // Hiển thị tổng token đã lưu
+    public float countAnimationDuration = 1.0f; // Thời gian chạy animation
 
     private void Awake()
     {
@@ -29,14 +36,18 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         StartTimer();
+        currentLevelTokens = 0;
+        UpdateTokenUI();
+        
     }
 
     private void Update()
     {
-        if (isTiming)
+        if (is_Timing)
         {
             levelTimer += Time.deltaTime;
             UpdateTimerUI();
+
         }
     }
 
@@ -46,23 +57,67 @@ public class GameManager : MonoBehaviour
         {
             int minutes = Mathf.FloorToInt(levelTimer / 60);
             float seconds = levelTimer % 60;
-            timerText.text = $"{minutes:00}:{seconds:00.00}"; // mm:ss.ff
-            //CompletePanelTimeText = timerText;
-             // mm:ss.ff
+            timerText.text = $"{minutes:00}:{seconds:00.00}"; 
+
         }
     }
 
     public void StartTimer()
     {
         levelTimer = 0f;
-        isTiming = true;
+        is_Timing = true;
     }
 
     public void StopTimer()
     {
-        isTiming = false;
+        is_Timing = false;
     }
 
+
+    
+    #region TOKEN_COUNT
+    
+
+    // ================= TOKEN CONTROL =================
+    public void AddToken(int amount)
+    {
+        currentLevelTokens += amount;
+        UpdateTokenUI();
+    }
+
+    private void UpdateTokenUI()
+    {
+        if (tokenText != null)
+        {
+            tokenText.text = currentLevelTokens.ToString();
+        }
+    }
+
+    private IEnumerator AnimateTokenCount(int from, int to)
+    {
+        float elapsed = 0f;
+        while (elapsed < countAnimationDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / countAnimationDuration);
+
+            int displayValue = Mathf.RoundToInt(Mathf.Lerp(from, to, t));
+            if (totalTokenText != null)
+                totalTokenText.text = displayValue.ToString();
+
+            yield return null;
+        }
+
+        // đảm bảo kết thúc đúng số cuối
+        if (totalTokenText != null)
+            totalTokenText.text = to.ToString();
+    }
+    #endregion
+    
+
+    #region LEVEL CONTROL
+
+    // ================= LEVEL CONTROL =================
     public void RestartLevel()
     {
         string address = sceneToReset.ToString();
@@ -84,57 +139,29 @@ public class GameManager : MonoBehaviour
         //SceneManager.LoadScene(sceneToReset.ToString());
         
     }
-    /* PlayerFerb Load
-    public void LoadNextLevel()
-    {
-        StopTimer();
+    #endregion
 
-        string currentScene = SceneManager.GetActiveScene().name;
-        string key = "BestTime_" + currentScene;
-
-        // So sánh và lưu Best Time
-        if (PlayerPrefs.HasKey(key))
-        {
-            float oldBest = PlayerPrefs.GetFloat(key);
-            if (levelTimer < oldBest)
-            {
-                PlayerPrefs.SetFloat(key, levelTimer);
-                PlayerPrefs.Save();
-            }
-        }
-        else
-        {
-            PlayerPrefs.SetFloat(key, levelTimer);
-            PlayerPrefs.Save();
-        }
-
-        // Đánh dấu level hoàn thành
-        LevelMapManager mapManager = FindObjectOfType<LevelMapManager>();
-        if (mapManager != null)
-        {
-            if (System.Enum.TryParse(currentScene, out SceneList currentSceneEnum))
-            {
-                LevelMapManager.MarkLevelComplete(currentSceneEnum);
-            }
-            else
-            {
-                Debug.LogWarning("Scene hiện tại không khớp enum SceneList, không thể lưu Complete");
-            }
-        }
-
-        if (ReviveManager.Instance != null)
-            ReviveManager.Instance.ResetReviveStatus();
-
-        SceneManager.LoadScene(sceneToLoad.ToString());
-    }
-    */
-
+    #region CompleteLevel
+    
     public void CompleteCheck()
     {
-        
+
         CompletePanel.SetActive(true);
         CompletePanelTimeText.text = timerText.text;
         StopTimer();
+        
+
+        // 🔹 Lấy tổng token hiện tại từ Firebase/cache để animate
+        FirebaseManager.Instance.GetTotalTokens(total =>
+        {
+            int oldTotal = total;
+            int newTotal = total + currentLevelTokens;
+
+            // Animate số token tăng (chỉ hiển thị, chưa lưu Firebase)
+            StartCoroutine(AnimateTokenCount(oldTotal, newTotal));
+
+            Debug.Log($"🔔 Hiển thị cộng {currentLevelTokens} token (chưa lưu).");
+        });
 
 
     }
@@ -163,5 +190,27 @@ public class GameManager : MonoBehaviour
         //SceneManager.LoadScene(sceneToLoad.ToString());
         string nextAddress = sceneToLoad.ToString();
         Addressables.LoadSceneAsync(nextAddress, LoadSceneMode.Single, true);
+
+
+        // 🔹 Số token sẽ cộng thêm
+        int amountToAdd = currentLevelTokens;
+
+
+        // 🔹 Cập nhật token an toàn (Firebase + Cache)
+        FirebaseManager.Instance.UpdateTotalTokens(amountToAdd, newTotal =>
+        {
+            Debug.Log($"✅ Đã lưu {amountToAdd} token, tổng mới = {newTotal}");
+
+            // Reset lại token tạm
+            currentLevelTokens = 0;
+            UpdateTokenUI();
+
+            // 🔹 Load scene kế tiếp
+            string nextAddress = sceneToLoad.ToString();
+            Addressables.LoadSceneAsync(nextAddress, LoadSceneMode.Single, true);
+        });
     }
+
+    #endregion
+
 }

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5809143574978864842}
   - component: {fileID: 7613880761541442470}
   - component: {fileID: 5237320784220627368}
+  - component: {fileID: 2050307391415391586}
   m_Layer: 0
   m_Name: Main Camera (1)
   m_TagString: MainCamera
@@ -148,6 +149,7 @@ MonoBehaviour:
   m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
+  m_Version: 2
   m_TaaSettings:
     m_Quality: 3
     m_FrameInfluence: 0.1
@@ -155,7 +157,6 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
-  m_Version: 2
 --- !u!114 &5237320784220627368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,6 +174,20 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   sharedProfile: {fileID: 11400000, guid: adfe9e1e66dadf4439b7472981621849, type: 2}
+--- !u!114 &2050307391415391586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4555538997193551827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8629569a9e7b8d4a9cc1bc34c5328b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Transition_animator: {fileID: 7406041168140255688}
+  Transiton_Gameobject: {fileID: 8040229434684596508}
 --- !u!1001 &4039526427928558900
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -263,6 +278,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scene_Transition
       objectReference: {fileID: 0}
+    - target: {fileID: 1142066196122049159, guid: 8f50ceb5cf8e2d0438de7f51d7e2132a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1386456291920633935, guid: 8f50ceb5cf8e2d0438de7f51d7e2132a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -306,10 +325,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1142066196122049159, guid: 8f50ceb5cf8e2d0438de7f51d7e2132a, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 937699872662091087}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8f50ceb5cf8e2d0438de7f51d7e2132a, type: 3}
 --- !u!95 &7406041168140255688 stripped
 Animator:
@@ -321,19 +337,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1142066196122049159, guid: 8f50ceb5cf8e2d0438de7f51d7e2132a, type: 3}
   m_PrefabInstance: {fileID: 6939428232371764123}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &937699872662091087
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8040229434684596508}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8629569a9e7b8d4a9cc1bc34c5328b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Transition_animator: {fileID: 7406041168140255688}
 --- !u!4 &8318257995676720084 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1386456291920633935, guid: 8f50ceb5cf8e2d0438de7f51d7e2132a, type: 3}

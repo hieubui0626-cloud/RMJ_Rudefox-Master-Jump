@@ -11,16 +11,20 @@ public class FirebaseManager : MonoBehaviour
     public static FirebaseManager Instance;
     private DatabaseReference dbRef;
 
-    // UID hiện tại
+    /// <summary>
+    /// UID hiện tại: ưu tiên Firebase UID nếu đã login,
+    /// fallback về guest_xxx khi chưa login.
+    /// </summary>
     private string PlayerId
     {
         get
         {
-            if (FirebaseAuth.DefaultInstance != null && FirebaseAuth.DefaultInstance.CurrentUser != null)
+            if (FirebaseAuth.DefaultInstance != null)
             {
-                return FirebaseAuth.DefaultInstance.CurrentUser.UserId;
+                var user = FirebaseAuth.DefaultInstance.CurrentUser;
+                if (user != null) return user.UserId;
             }
-            return SystemInfo.deviceUniqueIdentifier;
+            return "guest_" + SystemInfo.deviceUniqueIdentifier;
         }
     }
 
@@ -29,15 +33,8 @@ public class FirebaseManager : MonoBehaviour
 
     void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            //DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        if (Instance == null) Instance = this;
+        else { Destroy(gameObject); return; }
     }
 
     void Start()
@@ -48,12 +45,9 @@ public class FirebaseManager : MonoBehaviour
             {
                 dbRef = FirebaseDatabase.DefaultInstance.RootReference;
                 Debug.Log("✅ Firebase connected!");
-
                 IsReady = true;
-                GoogleFirebaseAuth.Instance.FirebaseAuthStarts();
-                
 
-                // 🔹 Sync local khi kết nối lần đầu
+                GoogleFirebaseAuth.Instance.FirebaseAuthStarts();
                 SyncLocalToFirebase();
 
                 OnFirebaseReady?.Invoke();
@@ -63,13 +57,9 @@ public class FirebaseManager : MonoBehaviour
                 Debug.LogError("❌ Firebase dependency error: " + task.Result);
             }
         });
-        //Boots_Level.Instance.loadscene();
     }
-    #region Bestime
-    
-    // ============================
-    //  Save / Load BestTime
-    // ============================
+
+    #region Best Time
     public void SaveBestTime(string levelName, float time)
     {
         PlayerPrefs.SetFloat("BestTime_" + levelName, time);
@@ -90,7 +80,8 @@ public class FirebaseManager : MonoBehaviour
             return;
         }
 
-        dbRef.Child("players").Child(PlayerId).Child("bestTimes").Child(levelName).GetValueAsync().ContinueWithOnMainThread(task =>
+        dbRef.Child("players").Child(PlayerId).Child("bestTimes").Child(levelName)
+        .GetValueAsync().ContinueWithOnMainThread(task =>
         {
             if (task.IsCompleted && task.Result.Exists)
             {
@@ -105,11 +96,8 @@ public class FirebaseManager : MonoBehaviour
         });
     }
     #endregion
-    #region Completed Level
-    
-    // ============================
-    //  Save / Load Completed Levels
-    // ============================
+
+    #region Completed Levels
     public void MarkLevelComplete(string levelName)
     {
         PlayerPrefs.SetInt("Level_" + levelName + "_Completed", 1);
@@ -135,7 +123,8 @@ public class FirebaseManager : MonoBehaviour
             return;
         }
 
-        dbRef.Child("players").Child(PlayerId).Child("completedLevels").GetValueAsync().ContinueWithOnMainThread(task =>
+        dbRef.Child("players").Child(PlayerId).Child("completedLevels").GetValueAsync()
+        .ContinueWithOnMainThread(task =>
         {
             List<string> completed = new List<string>();
             if (task.IsCompleted && task.Result.Exists)
@@ -158,11 +147,8 @@ public class FirebaseManager : MonoBehaviour
         });
     }
     #endregion
-    #region Đồng Bộ Dữ Liệu
-    
-    // ============================
-    //  Đồng bộ dữ liệu
-    // ============================
+
+    #region Sync & Merge
     public void SyncLocalToFirebase()
     {
         if (dbRef == null) return;
@@ -182,18 +168,15 @@ public class FirebaseManager : MonoBehaviour
                 dbRef.Child("players").Child(PlayerId).Child("bestTimes").Child(scene.ToString()).SetValueAsync(localTime);
             }
         }
-
         Debug.Log("🔄 Local progress synced to Firebase for: " + PlayerId);
     }
 
-    // 🔹 Chuyển dữ liệu từ deviceId sang UID khi user login lần đầu
     public void MergeLocalToUser(string newUid)
     {
-        string deviceId = SystemInfo.deviceUniqueIdentifier;
+        string guestId = "guest_" + SystemInfo.deviceUniqueIdentifier;
+        if (guestId == newUid) return;
 
-        if (deviceId == newUid) return; // cùng ID thì bỏ qua
-
-        Debug.Log("🔄 Merging local data from deviceId into user UID...");
+        Debug.Log("🔄 Merging local data from guest into user UID...");
 
         foreach (SceneList scene in Enum.GetValues(typeof(SceneList)))
         {
@@ -210,6 +193,66 @@ public class FirebaseManager : MonoBehaviour
                 dbRef.Child("players").Child(newUid).Child("completedLevels").Child(scene.ToString()).SetValueAsync(true);
             }
         }
+    }
+    #endregion
+
+    #region Token System
+    public void GetTotalTokens(Action<int> callback)
+    {
+        if (dbRef == null)
+        {
+            int cached = PlayerPrefs.GetInt("CachedTokens", 0);
+            callback?.Invoke(cached);
+            return;
+        }
+
+        dbRef.Child("players").Child(PlayerId).Child("tokens").GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCompleted && task.Result.Exists)
+            {
+                int total = int.Parse(task.Result.Value.ToString());
+                PlayerPrefs.SetInt("CachedTokens", total);
+                PlayerPrefs.Save();
+                callback?.Invoke(total);
+            }
+            else
+            {
+                Debug.LogWarning("⚠️ Không lấy được token từ Firebase → dùng cache");
+                int cached = PlayerPrefs.GetInt("CachedTokens", 0);
+                callback?.Invoke(cached);
+            }
+        });
+    }
+
+    public void UpdateTotalTokens(int amountToAdd, Action<int> callback = null)
+    {
+        GetTotalTokens(total =>
+        {
+            int newTotal = total + amountToAdd;
+
+            if (dbRef != null)
+            {
+                dbRef.Child("players").Child(PlayerId).Child("tokens").SetValueAsync(newTotal);
+            }
+
+            PlayerPrefs.SetInt("CachedTokens", newTotal);
+            PlayerPrefs.Save();
+
+            callback?.Invoke(newTotal);
+        });
+    }
+
+    public void SetTotalTokens(int newTotal, Action callback = null)
+    {
+        if (dbRef != null)
+        {
+            dbRef.Child("players").Child(PlayerId).Child("tokens").SetValueAsync(newTotal);
+        }
+
+        PlayerPrefs.SetInt("CachedTokens", newTotal);
+        PlayerPrefs.Save();
+
+        callback?.Invoke();
     }
     #endregion
 }

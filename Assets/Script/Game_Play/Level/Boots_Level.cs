@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
@@ -10,6 +10,7 @@ public class Boots_Level : MonoBehaviour
     public SceneList sceneToLoad;
     public SceneList sceneLogin;
     public GameObject LoginButton;
+    public GameObject SignOutButton;
     public TextMeshProUGUI Userid;
     public bool boots_done;
     public bool Test;
@@ -64,7 +65,7 @@ public class Boots_Level : MonoBehaviour
         //if (GoogleFirebaseAuth.Instance.user != null) return;
         if(!boots_done)
         {
-            Debug.LogWarning("check");
+            //Debug.LogWarning("check");
             loadscene();
 
         }
@@ -100,8 +101,8 @@ public class Boots_Level : MonoBehaviour
             if (GoogleFirebaseAuth.Instance.IsSignedIn())
             {
                 
-                Userid.text = "User Id:" + GoogleFirebaseAuth.Instance.user.DisplayName;
-                Debug.LogWarning("load scene");
+                //Userid.text = "User Id:" + GoogleFirebaseAuth.Instance.user.DisplayName;
+                //Debug.LogWarning("load scene");
                 //Debug.Log("[AdManager] Firebase ready & user logged in -> Load GameScene");
                 SceneManager.LoadScene(sceneToLoad.ToString());
                 LoginButton.SetActive(false);

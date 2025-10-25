@@ -1,14 +1,10 @@
 public enum SceneList
 {
-    #region Manager
     Source_Scene,
     Boot_Scene,
     Level_Map,
     Main_Menu,
     Login_Scene,
-    #endregion
-
-    #region World_1
     W1_1,
     W1_2,
     W1_3,
@@ -21,11 +17,7 @@ public enum SceneList
     W1_10,
     W1_11,
     W1_12,
-    #endregion
-
-
-
-
-    
-    
+    W1_13,
+    W1_14,
+    W1_15,
 }

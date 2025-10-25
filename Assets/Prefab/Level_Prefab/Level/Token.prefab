@@ -50,10 +50,12 @@ MonoBehaviour:
   movingPingPongLength: 1
   movingSpeed: 0
   rotationSpeed: 50
+  Maximum_Angles: 0
   moveBackground: 0
   moveGround: 0
   rotate: 1
   rotateWheel: 0
+  rotatePingPong: 0
   moveX: 0
   moveY: 0
 --- !u!23 &5916052200150339357
@@ -79,7 +81,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3ddbb3476066dae4885532fb58602e59, type: 2}
+  - {fileID: 2100000, guid: 809aef73723c3b04ab09b1969c96da58, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

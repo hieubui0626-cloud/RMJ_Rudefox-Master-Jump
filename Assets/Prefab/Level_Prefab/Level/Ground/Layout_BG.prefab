@@ -97,12 +97,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbb5770eb98f24f4a8b83efb710f4013, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movingPingPongLength: 1
+  movingPingPongLength: 3
   movingSpeed: 1
   rotationSpeed: 50
+  Maximum_Angles: 0
   moveBackground: 1
   moveGround: 0
   rotate: 0
   rotateWheel: 0
+  rotatePingPong: 0
   moveX: 0
   moveY: 0

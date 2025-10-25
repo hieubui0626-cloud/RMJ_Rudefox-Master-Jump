@@ -64,7 +64,8 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 7bbbe09797b4f2e4093855f45f0a5d88, type: 2}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2265433155488581696, guid: 17f642d20673e33409a9baba38b82138, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -116,9 +117,11 @@ MonoBehaviour:
   movingPingPongLength: 1
   movingSpeed: 0.75
   rotationSpeed: 50
+  Maximum_Angles: 0
   moveBackground: 0
   moveGround: 1
   rotate: 0
   rotateWheel: 0
+  rotatePingPong: 0
   moveX: 0
   moveY: 0

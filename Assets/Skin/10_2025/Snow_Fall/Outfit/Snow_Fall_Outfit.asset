@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea9e9b073f532344696418e4eb12281e, type: 3}
+  m_Name: Snow_Fall_Outfit
+  m_EditorClassIdentifier: 
+  skinId: Snow_Fall_Outfit_10_2025
+  displayName: Snow Fall Outfit
+  cost: 700
+  type: 0
+  icon: {fileID: -1335281371, guid: b996518e743ac2e49800c279637e3899, type: 3}
+  prefab: {fileID: 0}
+  mesh: {fileID: -4436584396620097087, guid: df24dba3b46415747bb91a0ad6c189dc, type: 3}
+  material: {fileID: 2100000, guid: 3ddbb3476066dae4885532fb58602e59, type: 2}

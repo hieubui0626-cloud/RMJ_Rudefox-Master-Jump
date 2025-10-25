@@ -10,6 +10,7 @@ public class Button_UI : MonoBehaviour
     public SceneList sceneToLoad;
     public SceneList sceneStart;
     public GameObject ButtonStart;
+    public GameObject Pannel;
 
     public void Start()
     {
@@ -41,5 +42,11 @@ public class Button_UI : MonoBehaviour
         SceneManager.LoadScene(sceneStart.ToString());
 
     }
+
+    public void OpenPannel()
+    { Pannel.SetActive(true);}
+
+    public void ClosePannel()
+    { Pannel.SetActive(false); }
 
 }

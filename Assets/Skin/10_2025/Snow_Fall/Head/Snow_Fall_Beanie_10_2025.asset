@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea9e9b073f532344696418e4eb12281e, type: 3}
+  m_Name: Snow_Fall_Beanie_10_2025
+  m_EditorClassIdentifier: 
+  skinId: Snow_Fall_Beanie_10_2025
+  displayName: Snow Fall Beanile
+  cost: 300
+  type: 1
+  icon: {fileID: -1918752446, guid: d779d464cffed614cab62a2549ee3e97, type: 3}
+  prefab: {fileID: 4202520423243196647, guid: e14fc9f30eba0fb4fa7789325598ee89, type: 3}
+  mesh: {fileID: 0}
+  material: {fileID: 0}

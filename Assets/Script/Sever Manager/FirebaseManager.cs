@@ -255,4 +255,67 @@ public class FirebaseManager : MonoBehaviour
         callback?.Invoke();
     }
     #endregion
+
+    #region SkinSystem
+    public void SaveUnlockedSkins(List<string> unlockedList)
+    {
+        Dictionary<string, object> unlockedMap = new Dictionary<string, object>();
+        foreach (var id in unlockedList)
+            unlockedMap[id] = true;
+
+        dbRef.Child("players").Child(PlayerId)
+            .Child("skins").Child("unlocked")
+            .SetValueAsync(unlockedMap);
+    }
+    public void SaveEquippedSkins(Dictionary<SkinType, string> equippedMap)
+    {
+        Dictionary<string, object> map = new Dictionary<string, object>();
+        foreach (var kv in equippedMap)
+            map[kv.Key.ToString()] = kv.Value;
+
+        dbRef.Child("players").Child(PlayerId)
+            .Child("skins").Child("equipped")
+            .SetValueAsync(map);
+    }
+
+    public void LoadPlayerSkinData(Action<int, List<string>, Dictionary<SkinType, string>> callback)
+    {
+        dbRef.Child("players").Child(PlayerId).GetValueAsync().ContinueWithOnMainThread(task => {
+            if (task.IsCompleted && !task.IsFaulted)
+            {
+                DataSnapshot snap = task.Result;
+                int tokens = 0;
+                List<string> unlocked = new List<string>();
+                Dictionary<SkinType, string> equipped = new Dictionary<SkinType, string>();
+
+                if (snap.Child("tokens").Exists)
+                    tokens = int.Parse(snap.Child("tokens").Value.ToString());
+
+                if (snap.Child("skins").Child("unlocked").Exists)
+                {
+                    foreach (var child in snap.Child("skins").Child("unlocked").Children)
+                        unlocked.Add(child.Key);
+                }
+
+                if (snap.Child("skins").Child("equipped").Exists)
+                {
+                    foreach (var child in snap.Child("skins").Child("equipped").Children)
+                    {
+                        SkinType type;
+                        if (Enum.TryParse(child.Key, out type))
+                            equipped[type] = child.Value.ToString();
+                    }
+                }
+
+                callback(tokens, unlocked, equipped);
+            }
+            else
+            {
+                Debug.LogWarning("Failed to load skin data from Firebase");
+                callback(0, new List<string>(), new Dictionary<SkinType, string>());
+            }
+        });
+    }
+
+    #endregion
 }

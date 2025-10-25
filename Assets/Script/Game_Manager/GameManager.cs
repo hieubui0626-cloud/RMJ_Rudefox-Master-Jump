@@ -163,6 +163,18 @@ public class GameManager : MonoBehaviour
             Debug.Log($"🔔 Hiển thị cộng {currentLevelTokens} token (chưa lưu).");
         });
 
+        int amountToAdd = currentLevelTokens;
+        FirebaseManager.Instance.UpdateTotalTokens(amountToAdd, newTotal =>
+        {
+            Debug.Log($"✅ Đã lưu {amountToAdd} token, tổng mới = {newTotal}");
+
+            // Reset lại token tạm
+            currentLevelTokens = 0;
+            UpdateTokenUI();
+
+
+        });
+
 
     }
     public void LoadNextLevel()
@@ -193,22 +205,11 @@ public class GameManager : MonoBehaviour
 
 
         // 🔹 Số token sẽ cộng thêm
-        int amountToAdd = currentLevelTokens;
+        
 
 
         // 🔹 Cập nhật token an toàn (Firebase + Cache)
-        FirebaseManager.Instance.UpdateTotalTokens(amountToAdd, newTotal =>
-        {
-            Debug.Log($"✅ Đã lưu {amountToAdd} token, tổng mới = {newTotal}");
-
-            // Reset lại token tạm
-            currentLevelTokens = 0;
-            UpdateTokenUI();
-
-            // 🔹 Load scene kế tiếp
-            string nextAddress = sceneToLoad.ToString();
-            Addressables.LoadSceneAsync(nextAddress, LoadSceneMode.Single, true);
-        });
+        
     }
 
     #endregion

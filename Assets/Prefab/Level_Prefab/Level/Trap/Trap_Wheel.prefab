@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7609426809703352918}
   m_Layer: 0
   m_Name: Trap_Wheel
-  m_TagString: Untagged
+  m_TagString: Trap
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -124,9 +124,11 @@ MonoBehaviour:
   movingPingPongLength: 1
   movingSpeed: 0
   rotationSpeed: -150
+  Maximum_Angles: 0
   moveBackground: 0
   moveGround: 0
   rotate: 0
   rotateWheel: 1
+  rotatePingPong: 0
   moveX: 0
   moveY: 0

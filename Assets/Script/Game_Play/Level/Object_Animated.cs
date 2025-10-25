@@ -51,6 +51,23 @@ public class Object_Animated : MonoBehaviour
             RotatePingPong();
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player") && moveX)
+        {
+            collision.transform.SetParent(transform);
+        }
+    }
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player") && (moveX || moveY))
+        {
+            // chỉ gỡ parent nếu player đang là child của platform
+            if (collision.transform.parent == transform)
+                collision.transform.SetParent(null);
+        }
+    }
+
     private void AnimateBackground()
     {
         float offset = (Mathf.PingPong(Time.time * movingSpeed, movingPingPongLength) - movingPingPongLength) * _direction;
@@ -65,6 +82,7 @@ public class Object_Animated : MonoBehaviour
             pos.y = _initialY + Mathf.PingPong(Time.time * movingSpeed, movingPingPongLength) - movingPingPongLength;
 
         if (moveX)
+
             pos.x = _initialX + Mathf.PingPong(Time.time * movingSpeed, movingPingPongLength) - movingPingPongLength;
 
         transform.position = pos;

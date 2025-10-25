@@ -45,6 +45,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4bb634ffe6a13df45866c71171c2cec6
+    m_Address: Snow_Fall_Trail.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6ad7056bbe2a15a4caee2164ce9ec13d
     m_Address: W1_11
     m_ReadOnly: 0
@@ -65,8 +70,23 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 914304c7f7cbbdf4ea4304af4973ca5a
+    m_Address: W1_14
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 98c65520dc0fb79478512205d78265e6
+    m_Address: W1_13
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ac9ae098b0dd26d428343aa0339529f2
     m_Address: Trap_Outer
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c4edad12effa67647a54cc04097441bc
+    m_Address: Snow_Fall_Back_10_2025.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -77,6 +97,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fa3064d0b35ba43459b33f78fc865f49
     m_Address: Ground_Cube_Motion
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fc5e0d857c6095042b0ab3e835dcefe9
+    m_Address: W1_15
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

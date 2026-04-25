@@ -1,28 +1,29 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
-[CreateAssetMenu(fileName = "SkinData", menuName = "Scriptable Objects/SkinData")]
+[CreateAssetMenu(menuName = "Skin Data")]
 public class SkinData : ScriptableObject
 {
-    public string skinId;
-    public string displayName;
-    public int cost;
+    public string skinID;
     public SkinType type;
     
+
+    public string displayName;
+    public int cost;
+
     public Sprite icon;
 
-    [Header("Prefab (dành cho Hat, Back, Trail)")]
-    public GameObject prefab;
-
-    [Header("Outfit data (dành cho SkinType.Outfit)")]
     public Mesh mesh;
     public Material material;
-}
 
+    public GameObject hatPrefab;
+    public GameObject backPrefab;
+    public GameObject trailPrefab;
+}
 public enum SkinType
 {
     Outfit,
     Head,
     Back,
-    Trail,
-    Hit,
+    Trail
 }

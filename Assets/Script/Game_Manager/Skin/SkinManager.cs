@@ -5,154 +5,47 @@ public class SkinManager : MonoBehaviour
 {
     public static SkinManager Instance;
 
-    [Header("Danh sách Skin khả dụng")]
-    public List<SkinData> allSkins;
+    public Dictionary<SkinType, string> equipped = new();
+    
 
-    private HashSet<string> unlockedSkins = new HashSet<string>();
-    private Dictionary<SkinType, string> equippedSkins = new Dictionary<SkinType, string>();
+    public System.Action OnSkinChanged;
+    
 
-    private bool dataLoaded = false;
+    void Awake() => Instance = this;
 
-    private void Awake()
+    public void SetEquipped(Dictionary<SkinType, string> data)
     {
-        if (Instance == null) Instance = this;
-        else { Destroy(gameObject); return; }
-
-        DontDestroyOnLoad(gameObject);
+        equipped = data;
     }
 
-    private void Start()
+    public void Equip(SkinData skin)
     {
-        // Nếu Firebase sẵn sàng thì load, còn không thì chờ callback
-        if (FirebaseManager.IsReady)
-            LoadFromFirebase();
-        else
-            FirebaseManager.OnFirebaseReady += LoadFromFirebase;
-    }
-
-    private void LoadFromFirebase()
-    {
-        FirebaseManager.Instance.LoadPlayerSkinData((tokens, unlockedList, equippedMap) =>
+        if (!SkinInventory.Instance.IsOwned(skin.skinID))
         {
-            // 🔹 Dữ liệu Firebase
-            unlockedSkins = new HashSet<string>(unlockedList);
-            equippedSkins = new Dictionary<SkinType, string>(equippedMap);
-
-            // 🔹 Nếu rỗng → fallback PlayerPrefs (offline)
-            if (unlockedSkins.Count == 0)
-            {
-                string unlockedJson = PlayerPrefs.GetString("UnlockedSkins", "");
-                if (!string.IsNullOrEmpty(unlockedJson))
-                    unlockedSkins = new HashSet<string>(unlockedJson.Split(','));
-            }
-
-            foreach (SkinType type in System.Enum.GetValues(typeof(SkinType)))
-            {
-                if (!equippedSkins.ContainsKey(type))
-                {
-                    string key = $"Equipped_{type}";
-                    string skinId = PlayerPrefs.GetString(key, "");
-                    if (!string.IsNullOrEmpty(skinId))
-                        equippedSkins[type] = skinId;
-                }
-            }
-
-            dataLoaded = true;
-            Debug.Log("✅ Skin data loaded from Firebase");
-        });
-    }
-
-    // ==========================================================
-    // 🔹 KIỂM TRA VÀ MỞ KHÓA
-    // ==========================================================
-    public bool IsUnlocked(string id) => unlockedSkins.Contains(id);
-
-    public void UnlockSkin(SkinData skin)
-    {
-        if (!dataLoaded)
-        {
-            Debug.LogWarning("⏳ Chưa load xong dữ liệu skin, vui lòng chờ...");
+            Debug.LogWarning("Skin chưa unlock!");
             return;
         }
 
-        if (IsUnlocked(skin.skinId))
-        {
-            Debug.Log($"✅ Skin {skin.displayName} đã được mở khóa trước đó");
-            return;
-        }
+        equipped[skin.type] = skin.skinID;
 
-        FirebaseManager.Instance.GetTotalTokens(total =>
-        {
-            if (total >= skin.cost)
-            {
-                FirebaseManager.Instance.UpdateTotalTokens(-skin.cost, newTotal =>
-                {
-                    unlockedSkins.Add(skin.skinId);
-                    SaveToFirebase();
-                    SaveLocalCache();
+        SkinPersistence.Instance.SaveEquipped(equipped);
 
-                    Debug.Log($"✅ Đã mở khóa skin {skin.displayName}, token còn lại: {newTotal}");
-                });
-            }
-            else
-            {
-                Debug.LogWarning("❌ Không đủ token để mở khóa skin này!");
-            }
-        });
+        OnSkinChanged?.Invoke();
     }
 
-    // ==========================================================
-    // 🔹 TRANG BỊ SKIN
-    // ==========================================================
-    public void EquipSkin(SkinData skin)
+    public void Unquip(SkinData skin)
     {
-        if (!dataLoaded)
-        {
-            Debug.LogWarning("⏳ Dữ liệu chưa tải xong!");
-            return;
-        }
+        if (skin == null) return;
 
-        if (!IsUnlocked(skin.skinId))
-        {
-            Debug.LogWarning("❌ Skin chưa được mở khóa!");
-            return;
-        }
+        if (equipped.ContainsKey(skin.type))
+            equipped.Remove(skin.type);
 
-        equippedSkins[skin.type] = skin.skinId;
-        SaveToFirebase();
-        SaveLocalCache();
+        SkinPersistence.Instance.SaveEquipped(equipped);
 
-        // Áp skin ngay lên Player
-        if (PlayerSkinApplier.Instance != null)
-            PlayerSkinApplier.Instance.ApplySkin(skin);
-
-        Debug.Log($"🎽 Đã trang bị skin: {skin.displayName}");
+        OnSkinChanged?.Invoke();
     }
-
-    // ==========================================================
-    // 🔹 LƯU DỮ LIỆU (Firebase + Local Cache)
-    // ==========================================================
-    private void SaveToFirebase()
+    public string Get(SkinType type)
     {
-        FirebaseManager.Instance.SaveUnlockedSkins(new List<string>(unlockedSkins));
-        FirebaseManager.Instance.SaveEquippedSkins(new Dictionary<SkinType, string>(equippedSkins));
-    }
-
-    private void SaveLocalCache()
-    {
-        PlayerPrefs.SetString("UnlockedSkins", string.Join(",", unlockedSkins));
-        foreach (var kvp in equippedSkins)
-            PlayerPrefs.SetString($"Equipped_{kvp.Key}", kvp.Value);
-        PlayerPrefs.Save();
-    }
-
-    // ==========================================================
-    // 🔹 LẤY SKIN ĐANG TRANG BỊ
-    // ==========================================================
-    public SkinData GetEquippedSkin(SkinType type)
-    {
-        if (equippedSkins.TryGetValue(type, out string id))
-            return allSkins.Find(s => s.skinId == id);
-        return null;
+        return equipped.TryGetValue(type, out var id) ? id : null;
     }
 }

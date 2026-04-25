@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.yourcompany.yourgame">
+
+	<!-- 🔹 Quyền truy cập cần thiết -->
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+	<application
+        android:label="@string/app_name"
+        android:icon="@mipmap/app_icon"
+        tools:replace="android:label,android:icon">
+
+		<!-- 🔹 Activity chính -->
+		<activity
+            android:name="com.unity3d.player.UnityPlayerActivity"
+            android:theme="@style/UnityThemeSelector"
+            android:launchMode="singleTask"
+            android:exported="true">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+
+			<meta-data android:name="unityplayer.UnityActivity" android:value="true" />
+		</activity>
+
+		<!-- 🔹 Dành cho Google Sign-In -->
+		<meta-data
+            android:name="com.google.android.gms.auth.api.credentials.ClientId"
+            android:value="870980917346-ur3o530eo7olt3o30m91gfqnq1ebgall.apps.googleusercontent.com" />
+
+		
+
+		<!-- 🔹 Dịch vụ hỗ trợ Google Play -->
+		<service
+            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
+            android:exported="true"
+            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION" />
+
+	</application>
+</manifest>

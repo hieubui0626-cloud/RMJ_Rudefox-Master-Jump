@@ -149,9 +149,9 @@ RectTransform:
   m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 1
   m_Children:
-  - {fileID: 1411838346}
   - {fileID: 1908154882}
   - {fileID: 715766878}
+  - {fileID: 1411838346}
   m_Father: {fileID: 1341626245}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -494,7 +494,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 715766882}
         m_TargetAssemblyTypeName: Button_UI, Assembly-CSharp
-        m_MethodName: CloseUserPannel
+        m_MethodName: ClosePannel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -557,7 +557,7 @@ MonoBehaviour:
   sceneToLoad: 0
   sceneStart: 0
   ButtonStart: {fileID: 0}
-  Pannel: {fileID: 0}
+  Pannel: {fileID: 238534060}
 --- !u!1001 &886129843
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -642,6 +642,7 @@ GameObject:
   - component: {fileID: 894504349}
   - component: {fileID: 894504350}
   - component: {fileID: 894504351}
+  - component: {fileID: 894504353}
   - component: {fileID: 894504352}
   m_Layer: 0
   m_Name: Boots_Level
@@ -693,11 +694,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useTestAds: 1
   ads_Active: 0
-  sceneToLoad: 9
-  realRewardId_Android: ca-app-pub-3940256099942544/6300978111
-  realRewardId_IOS: ca-app-pub-3940256099942544/1712485313
-  realBannerId_Android: ca-app-pub-3940256099942544/6300978111
-  realBannerId_IOS: ca-app-pub-3940256099942544/2934735716
+  sceneToLoad: 3
+  realRewardId_Android: ca-app-pub-2045503601876077/7855506189
+  realRewardId_IOS: ca-app-pub-2045503601876077/8696509322
+  realBannerId_Android: ca-app-pub-2045503601876077/2561716204
+  realBannerId_IOS: ca-app-pub-2045503601876077/8696509322
 --- !u!114 &894504348
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -759,7 +760,9 @@ MonoBehaviour:
   SignOutButton: {fileID: 1956508861}
   Userid: {fileID: 1908154880}
   boots_done: 0
-  Test: 0
+  Test: 1
+  Replace_GGAds_by_UnityAds: 0
+  NoAds: 0
 --- !u!114 &894504352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -772,11 +775,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b3eee88b18e3c94f9598dbdec7c5b61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allSkins:
-  - {fileID: 11400000, guid: 4bb634ffe6a13df45866c71171c2cec6, type: 2}
-  - {fileID: 11400000, guid: a5fce82e8c33fec42a0293ecc9a947ac, type: 2}
-  - {fileID: 11400000, guid: b00208ddb8fdd4e4da35323ade3719f6, type: 2}
-  - {fileID: 11400000, guid: 28103851fec061a4ea27d923dde81728, type: 2}
+--- !u!114 &894504353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 894504342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f79a06374c71e114893c52ef6b511302, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _testMode: 0
+  Ads_Banner_placementID: Banner_Android
+  Ads_Reward_placementID: Rewarded_Android
+  _androidGameId: 5979835
+  _iOSGameId: 5979834
+  _webGLGameId: YOUR_WEBGL_GAME_ID
 --- !u!1 &909031358
 GameObject:
   m_ObjectHideFlags: 0
@@ -969,8 +985,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
+  m_sharedMaterial: {fileID: 2140474, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1035,7 +1051,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1107196782
@@ -1444,8 +1460,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Sign Out
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 139ad921bd30c1a40a87b12137d07e02, type: 2}
-  m_sharedMaterial: {fileID: 7177322884073392645, guid: 139ad921bd30c1a40a87b12137d07e02, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
+  m_sharedMaterial: {fileID: 2140474, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1510,7 +1526,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1549738541
@@ -1894,7 +1910,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 8.23756, y: 39.2417}
+  m_AnchoredPosition: {x: 8.23756, y: 36}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1956508861
@@ -1933,7 +1949,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 445, y: 197}
+  m_AnchoredPosition: {x: -445, y: 200}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1956508863
@@ -1982,7 +1998,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1956508866}
         m_TargetAssemblyTypeName: Button_UI, Assembly-CSharp
-        m_MethodName: OpenUserPannel
+        m_MethodName: OpenPannel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2045,7 +2061,7 @@ MonoBehaviour:
   sceneToLoad: 0
   sceneStart: 0
   ButtonStart: {fileID: 0}
-  Pannel: {fileID: 0}
+  Pannel: {fileID: 238534060}
 --- !u!4 &6987198284890655898 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6987198285776750633, guid: 0bd9083207e350d4ab0cac7d36d9f8be, type: 3}

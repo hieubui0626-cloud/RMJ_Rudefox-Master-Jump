@@ -81,16 +81,28 @@ public class GoogleFirebaseAuth : MonoBehaviour
 
     public void SignInWithGoogle()
     {
+        #region old Google Sign
+        /*
         GoogleSignIn.Configuration = googleConfig;
         GoogleSignIn.Configuration.UseGameSignIn = false;
         GoogleSignIn.Configuration.RequestIdToken = true;
 
+        GoogleSignIn.DefaultInstance.SignOut();
         var signInTask = GoogleSignIn.DefaultInstance.SignIn();
 
         signInTask.ContinueWithOnMainThread(task =>
         {
             if (task.IsCanceled) { Debug.LogWarning("⚠️ Google Sign-In canceled."); return; }
-            if (task.IsFaulted) { Debug.LogError("Google Sign-In failed: " + task.Exception); return; }
+            if (task.IsFaulted)
+            {
+                Debug.LogError("Google Sign-In failed: " + task.Exception);
+
+                foreach (var e in task.Exception.InnerExceptions)
+                    Debug.LogError($"Google SignIn inner error: {e.Message}\n{e.StackTrace}");
+                return;
+                
+                
+            }
 
             GoogleSignInUser googleUser = task.Result;
             Debug.Log("✅ Google Sign-In success: " + googleUser.DisplayName);
@@ -110,11 +122,52 @@ public class GoogleFirebaseAuth : MonoBehaviour
                 FirebaseManager.Instance.MergeLocalToUser(user.UserId);
             });
         });
+        */
+        #endregion
+
+
+        #region New Google Sign
+        GoogleSignIn.Configuration = googleConfig;
+        GoogleSignIn.Configuration.UseGameSignIn = false;
+        GoogleSignIn.Configuration.RequestIdToken = true;
+
+        GoogleSignIn.DefaultInstance.SignIn().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsFaulted || task.IsCanceled)
+            {
+                Debug.LogError("Google Sign-In Failed: " + task.Exception);
+                return;
+            }
+
+            GoogleSignInUser googleUser = task.Result;
+
+            var credential = GoogleAuthProvider.GetCredential(googleUser.IdToken, null);
+
+            FirebaseAuth.DefaultInstance
+                .SignInWithCredentialAsync(credential)
+                .ContinueWithOnMainThread(authTask =>
+                {
+                    if (authTask.IsFaulted || authTask.IsCanceled)
+                    {
+                        Debug.LogError("Firebase Auth failed: " + authTask.Exception);
+                        return;
+                    }
+
+                    FirebaseUser user = authTask.Result;
+                    Debug.Log("Login Success: " + user.DisplayName);
+
+                    // Tự động merge dữ liệu local → cloud
+                    FirebaseManager.Instance.MergeLocalToUser(user.UserId);
+                });
+        });
+        #endregion
+
     }
 
     public void SignOut()
     {
-        StartCoroutine(HandleSignOutRoutine());
+        GoogleSignIn.DefaultInstance.SignOut();
+        FirebaseAuth.DefaultInstance.SignOut();
     }
 
     private IEnumerator HandleSignOutRoutine()
@@ -138,4 +191,6 @@ public class GoogleFirebaseAuth : MonoBehaviour
         Boots_Level.Instance.GoogleSignButton();
         Ads_Manager.Instance.HideBanner();
     }
+
+   
 }

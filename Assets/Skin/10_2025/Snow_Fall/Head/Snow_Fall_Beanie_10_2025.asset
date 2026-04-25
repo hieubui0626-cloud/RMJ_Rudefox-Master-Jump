@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea9e9b073f532344696418e4eb12281e, type: 3}
   m_Name: Snow_Fall_Beanie_10_2025
   m_EditorClassIdentifier: 
-  skinId: Snow_Fall_Beanie_10_2025
-  displayName: Snow Fall Beanile
-  cost: 300
+  skinID: Snow_Fall_Beanie_10_2025
   type: 1
+  displayName: Snow Fall Beanile
+  cost: 100
   icon: {fileID: -1918752446, guid: d779d464cffed614cab62a2549ee3e97, type: 3}
-  prefab: {fileID: 4202520423243196647, guid: e14fc9f30eba0fb4fa7789325598ee89, type: 3}
   mesh: {fileID: 0}
-  material: {fileID: 0}
+  material: {fileID: -876546973899608171, guid: f113724212710d34c8aefc78ada32fbf, type: 3}
+  hatPrefab: {fileID: 4202520423243196647, guid: e14fc9f30eba0fb4fa7789325598ee89, type: 3}
+  backPrefab: {fileID: 0}
+  trailPrefab: {fileID: 0}

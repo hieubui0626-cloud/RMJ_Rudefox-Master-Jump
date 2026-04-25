@@ -14,8 +14,11 @@ public class Boots_Level : MonoBehaviour
     public TextMeshProUGUI Userid;
     public bool boots_done;
     public bool Test;
+    public bool Replace_GGAds_by_UnityAds;
+    public bool NoAds;
     public void Awake()
     {
+        Debug.Log($"🧩 Replace_GGAds_by_UnityAds = {Replace_GGAds_by_UnityAds}");
         if (Instance == null)
         {
             Instance = this;
@@ -76,7 +79,7 @@ public class Boots_Level : MonoBehaviour
     {
         Scene currentScene = SceneManager.GetActiveScene();
         if (currentScene.name != "Boot_Scene") return;
-        if (!Ads_Manager.Instance.ads_Active) return;
+        if (!Ads_Manager.Instance.ads_Active && !UnityAdsManager.Instance.ads_Active) return;
         if (!FirebaseManager.IsReady) return;
         SceneManager.LoadScene(sceneToLoad.ToString());
     }
@@ -93,7 +96,7 @@ public class Boots_Level : MonoBehaviour
         Scene currentScene = SceneManager.GetActiveScene();
         
         //if(currentScene.name == "Boot_Scene" || currentScene.name == "Login_Scene") return;
-        if (!Ads_Manager.Instance.ads_Active) return;
+        //if (!Ads_Manager.Instance.ads_Active && !UnityAdsManager.Instance.ads_Active) return;
         if (FirebaseManager.IsReady)
         {
             //SceneManager.LoadScene(sceneToLoad.ToString());

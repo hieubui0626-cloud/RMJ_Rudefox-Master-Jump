@@ -14,6 +14,8 @@ public class Ads_Manager : MonoBehaviour
 
     public SceneList sceneToLoad;
 
+    //ca-app-pub-3940256099942544/5224354917
+
 
     // Test IDs (Google cung cấp sẵn)
     private string testRewardId_Android = "ca-app-pub-3940256099942544/5224354917";
@@ -21,18 +23,19 @@ public class Ads_Manager : MonoBehaviour
 
     // Real IDs (bạn gắn từ AdMob)
     [Header("Real Reward Ad Unit IDs")]
-    public string realRewardId_Android = "ca-app-pub-3940256099942544/6300978111";
-    public string realRewardId_IOS = "ca-app-pub-3940256099942544/1712485313";
+    public string realRewardId_Android = "ca-app-pub-2045503601876077/7855506189";
+    public string realRewardId_IOS = "ca-app-pub-2045503601876077/8696509322";
 
-    
+
 
     // Test IDs
-    private string testBannerId_Android = "ca-app-pub-3940256099942544/6300978111";
+    //ca-app-pub-3940256099942544/6300978111
+    private string testBannerId_Android = "ca-app-pub-3940256099942544/5224354917";
     private string testBannerId_IOS = "ca-app-pub-3940256099942544/2934735716";
 
     // Real IDs (gắn từ AdMob của bạn)
     [Header("Real Ad Unit IDs")]
-    public string realBannerId_Android = "ca-app-pub-2045503601876077/1987630747";
+    public string realBannerId_Android = "ca-app-pub-2045503601876077/2561716204";
     public string realBannerId_IOS = "ca-app-pub-2045503601876077/8696509322";
 
     private BannerView bannerView;

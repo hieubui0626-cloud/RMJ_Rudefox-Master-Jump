@@ -56,6 +56,7 @@ public class FirebaseManager : MonoBehaviour
             {
                 Debug.LogError("❌ Firebase dependency error: " + task.Result);
             }
+
         });
     }
 

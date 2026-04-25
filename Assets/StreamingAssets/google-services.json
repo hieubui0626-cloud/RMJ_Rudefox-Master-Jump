@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "870980917346-13jkjdfouoog7orle9brgnavgtqm992a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.Kizzul.RMJ",
+            "certificate_hash": "13886d27941870a6fde7a481390f5b91bfbf58a4"
+          }
+        },
+        {
           "client_id": "870980917346-labml2jq3t5mvd0p100p69kd3nlb2r16.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

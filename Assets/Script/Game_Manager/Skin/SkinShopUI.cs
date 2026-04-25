@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 public class SkinShopUI : MonoBehaviour
 {
+    public static SkinShopUI Instance;
     [Header("References")]
     public GameObject skinUIPrefab;
     public Transform gridParent;
@@ -12,9 +13,14 @@ public class SkinShopUI : MonoBehaviour
     public Button hatTabButton;
     public Button backTabButton;
     public Button trailTabButton;
+    public SkinDataBase database;
 
     private List<GameObject> activeItems = new List<GameObject>();
 
+    private void Awake()
+    {
+        Instance = this;
+    }
     private void Start()
     {
         outfitTabButton.onClick.AddListener(() => PopulateShopByType(SkinType.Outfit));
@@ -31,7 +37,8 @@ public class SkinShopUI : MonoBehaviour
             Destroy(item);
         activeItems.Clear();
 
-        var skins = SkinManager.Instance.allSkins.Where(s => s.type == type);
+        var skins = database.GetSkinsByType(type);
+
         foreach (var skin in skins)
         {
             GameObject item = Instantiate(skinUIPrefab, gridParent);
@@ -39,4 +46,5 @@ public class SkinShopUI : MonoBehaviour
             activeItems.Add(item);
         }
     }
+
 }

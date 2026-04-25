@@ -20,32 +20,45 @@ public class UIManager : MonoBehaviour
             yesButton.onClick.RemoveAllListeners();
             yesButton.onClick.AddListener(() =>
             {
-                revivePanel.SetActive(false);
-
-                if (Ads_Manager.Instance != null)
+                if (Application.internetReachability == NetworkReachability.NotReachable)
                 {
-                    FindObjectOfType<Ads_Manager>().ShowRewardAd(
-                        onRewardEarned: () =>
+                    Debug.LogWarning("⚠️ No internet connection – skipping ads, reviving directly.");
+                    ReviveManager.Instance.OnReviveConfirmed();
+                    return;
+                }
+                revivePanel.SetActive(false);
+                void HandleRevive(bool success)
+                {
+                    if (success) ReviveManager.Instance.OnReviveConfirmed();
+                    else
+                    {
+                        if (PlayerController.Instance != null)
                         {
-                            // Xem hết → revive
-                            ReviveManager.Instance.OnReviveConfirmed();
-                        },
-                        onAdClosed: () =>
-                        {
-                            // Thoát sớm → tiếp tục chơi
-                            if (PlayerController.Instance != null)
-                            {
-                                PlayerController.Instance.Disableplayer = false;
-                                if (PlayerController.Instance.meshRenderer != null)
-                                    PlayerController.Instance.meshRenderer.enabled = true;
-                            }
+                            PlayerController.Instance.Disableplayer = false;
+                            if (PlayerController.Instance.meshRenderer != null)
+                                PlayerController.Instance.meshRenderer.enabled = true;
                         }
-                    );
+                    }
+                }
+                if (!Boots_Level.Instance.Replace_GGAds_by_UnityAds)
+                {
+                    if (Ads_Manager.Instance?.ads_Active == true)
+                        Ads_Manager.Instance.ShowRewardAd(() => HandleRevive(true), () => HandleRevive(false));
+                    else
+                        HandleRevive(true);
                 }
                 else
                 {
-                    ReviveManager.Instance.OnReviveConfirmed();
+                    if (UnityAdsManager.Instance?.ads_Active == true)
+                        UnityAdsManager.Instance.ShowRewardAd(() => HandleRevive(true), () => HandleRevive(false));
+                    else
+                        HandleRevive(true);
                 }
+
+
+
+
+
             });
         }
 

@@ -12,9 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea9e9b073f532344696418e4eb12281e, type: 3}
   m_Name: Snow_Fall_Back_10_2025
   m_EditorClassIdentifier: 
-  skinId: Snow_Fall_Back_10_2025
-  displayName: Snow Fall Wing
-  cost: 500
+  skinID: Snow_Fall_Back_10_2025
   type: 2
-  prefab: {fileID: 2955452250229399962, guid: c4edad12effa67647a54cc04097441bc, type: 3}
+  displayName: Snow Fall Wing
+  cost: 180
   icon: {fileID: -2054686363, guid: 127f88de11a4506428d73f98b1fe3101, type: 3}
+  mesh: {fileID: 0}
+  material: {fileID: -876546973899608171, guid: f113724212710d34c8aefc78ada32fbf, type: 3}
+  hatPrefab: {fileID: 0}
+  backPrefab: {fileID: 2955452250229399962, guid: c4edad12effa67647a54cc04097441bc, type: 3}
+  trailPrefab: {fileID: 0}

@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea9e9b073f532344696418e4eb12281e, type: 3}
   m_Name: Snow_Fall_Trail
   m_EditorClassIdentifier: 
-  skinId: Snow_Fall_Trail
-  displayName: Snow Fall Trail
-  cost: 150
+  skinID: Snow_Fall_Trail_10_2025
   type: 3
+  displayName: Snow Fall Trail
+  cost: 50
   icon: {fileID: -1067847863, guid: a331d77775fd3d64fa2e2605e40b3d44, type: 3}
-  prefab: {fileID: 3126006714927699228, guid: e99fb19eec46ebf488578a8781d034e9, type: 3}
   mesh: {fileID: 0}
-  material: {fileID: 0}
+  material: {fileID: 2100000, guid: 08d1b8d96d0600647a74e9907081353e, type: 2}
+  hatPrefab: {fileID: 0}
+  backPrefab: {fileID: 0}
+  trailPrefab: {fileID: 3126006714927699228, guid: e99fb19eec46ebf488578a8781d034e9, type: 3}

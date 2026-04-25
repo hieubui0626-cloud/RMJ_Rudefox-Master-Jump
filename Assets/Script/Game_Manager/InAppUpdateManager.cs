@@ -3,25 +3,59 @@ using UnityEngine;
 using Google.Play.AppUpdate;
 using Google.Play.Common;
 using TMPro;
+using Firebase;
+using Firebase.RemoteConfig;
+using System.Threading.Tasks;
+
+#if UNITY_EDITOR
+using UnityEditor; // Dành cho nút test trong Inspector
+#endif
 
 public class InAppUpdateManager : MonoBehaviour
 {
     private AppUpdateManager appUpdateManager;
     public TextMeshProUGUI versionApp;
 
-    void Start()
+    [Header("Firebase Config Keys")]
+    public string latestVersionKey = "latest_version";
+    public string updateUrlKey = "update_url";
+    public string forceUpdateKey = "force_update";
+
+    [Header("Test Mode")]
+    public bool testInEditor = true; // Có thể tắt nếu không muốn chạy Firebase trong Editor
+
+    private void Start()
     {
-        versionApp.text = "Version: " + Application.version;
-        appUpdateManager = new AppUpdateManager();
+        if (versionApp != null)
+            versionApp.text = "Version: " + Application.version;
+        if (testInEditor)
+        {
+            Debug.Log("Editor build → Using Firebase Update check.");
+            StartCoroutine(CheckForUpdate_Firebase());
+        }
+        else 
+        {
+            if (Boots_Level.Instance.Replace_GGAds_by_UnityAds)
+            {
+
+                Debug.Log("Running outside Play Store → Using Firebase Remote Config");
+                StartCoroutine(CheckForUpdate_Firebase());
+
+            }
+            else
+            {
+                Debug.Log("Running from Google Play → Using Play App Update");
+                appUpdateManager = new AppUpdateManager();
+                StartCoroutine(CheckForUpdate_CHPlay());
+            }
+        }
         
-        StartCoroutine(CheckForUpdate());
     }
 
-    private IEnumerator CheckForUpdate()
+    #region -------- CH Play Update --------
+    private IEnumerator CheckForUpdate_CHPlay()
     {
-        //versionApp.text = "Version: " + Application.version;
-        Debug.Log("Current Version: " + Application.version);
-
+        Debug.Log("Checking for Google Play updates...");
         var appUpdateInfoOperation = appUpdateManager.GetAppUpdateInfo();
         yield return appUpdateInfoOperation;
 
@@ -29,7 +63,6 @@ public class InAppUpdateManager : MonoBehaviour
         {
             var appUpdateInfo = appUpdateInfoOperation.GetResult();
 
-            // Kiểm tra xem có update không
             if (appUpdateInfo.UpdateAvailability == UpdateAvailability.UpdateAvailable &&
                 appUpdateInfo.IsUpdateTypeAllowed(AppUpdateOptions.ImmediateAppUpdateOptions()))
             {
@@ -64,4 +97,101 @@ public class InAppUpdateManager : MonoBehaviour
             Debug.Log("Update started successfully.");
         }
     }
+    #endregion
+
+    #region -------- Firebase Remote Config Update --------
+    private IEnumerator CheckForUpdate_Firebase()
+    {
+        Debug.Log("Checking for update via Firebase Remote Config...");
+        var task = CheckForUpdateAsync();
+        yield return new WaitUntil(() => task.IsCompleted);
+    }
+
+    private async Task CheckForUpdateAsync()
+    {
+        var dependencyStatus = await FirebaseApp.CheckAndFixDependenciesAsync();
+        if (dependencyStatus != DependencyStatus.Available)
+        {
+            Debug.LogError("Firebase dependencies not ready: " + dependencyStatus);
+            return;
+        }
+
+        await FirebaseRemoteConfig.DefaultInstance.FetchAsync(System.TimeSpan.FromSeconds(10));
+        await FirebaseRemoteConfig.DefaultInstance.ActivateAsync();
+
+        string latestVersion = FirebaseRemoteConfig.DefaultInstance.GetValue(latestVersionKey).StringValue;
+        string updateUrl = FirebaseRemoteConfig.DefaultInstance.GetValue(updateUrlKey).StringValue;
+        bool forceUpdate = FirebaseRemoteConfig.DefaultInstance.GetValue(forceUpdateKey).BooleanValue;
+
+        Debug.Log($"Firebase version: {latestVersion}, Current: {Application.version}");
+
+        if (IsNewerVersion(latestVersion, Application.version))
+        {
+            Debug.Log("🔥 Có bản cập nhật mới từ Firebase!");
+            if (forceUpdate)
+            {
+                Debug.Log("Force update enabled → mở URL ngay.");
+                Application.OpenURL(updateUrl);
+            }
+            else
+            {
+                ShowUpdatePopup(updateUrl, latestVersion);
+            }
+        }
+        else
+        {
+            Debug.Log("✅ Game đang ở phiên bản mới nhất.");
+        }
+    }
+
+    private bool IsNewerVersion(string remote, string local)
+    {
+        try
+        {
+            System.Version remoteV = new System.Version(remote);
+            System.Version localV = new System.Version(local);
+            return remoteV.CompareTo(localV) > 0;
+        }
+        catch
+        {
+            Debug.LogWarning($"Version parse error. Remote: {remote}, Local: {local}");
+            return false;
+        }
+    }
+
+    private void ShowUpdatePopup(string url, string newVer)
+    {
+        Debug.Log($"📢 Có bản cập nhật mới ({newVer})! Tải tại: {url}");
+        // Ở đây bạn có thể hiển thị popup UI thật
+        // Ví dụ:
+        // updatePopup.SetActive(true);
+        // updateButton.onClick.AddListener(() => Application.OpenURL(url));
+    }
+    #endregion
+
+    #region -------- Utility --------
+    private bool IsRunningFromPlayStore()
+    {
+        return Application.identifier.StartsWith("com.");
+    }
+    #endregion
+
+#if UNITY_EDITOR
+    // 🔘 Thêm nút test trong Inspector để chạy Firebase update check thủ công
+    [CustomEditor(typeof(InAppUpdateManager))]
+    public class InAppUpdateManagerEditor : Editor
+    {
+        public override void OnInspectorGUI()
+        {
+            DrawDefaultInspector();
+
+            InAppUpdateManager script = (InAppUpdateManager)target;
+
+            if (GUILayout.Button("🧩 Check Firebase Update Now"))
+            {
+                script.StartCoroutine(script.CheckForUpdate_Firebase());
+            }
+        }
+    }
+#endif
 }

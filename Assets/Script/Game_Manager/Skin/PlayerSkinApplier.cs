@@ -4,91 +4,102 @@ public class PlayerSkinApplier : MonoBehaviour
 {
     public static PlayerSkinApplier Instance;
 
-    [Header("References")]
-    public SkinnedMeshRenderer bodyRenderer; // Body gốc trong player
-    public Transform headParent;
-    public Transform backParent;
-    public Transform trailParent;
+    public SkinnedMeshRenderer outfitRenderer;
 
-    private void Awake()
+    public Transform hatAnchor;
+    public Transform backAnchor;
+    public Transform trailAnchor;
+
+    GameObject head, back, trail;
+
+    void Awake() => Instance = this;
+
+    void Start()
     {
-        if (Instance == null)
-            Instance = this;
-        else
+        SkinManager.Instance.OnSkinChanged += ApplyAll;
+        ApplyAll();
+    }
+
+    public void ApplyAll()
+    {
+        var db = SkinDataBase.Instance;
+
+        ApplyOutfit(db.Get(SkinManager.Instance.Get(SkinType.Outfit)));
+        ApplyPrefab(ref head, db.Get(SkinManager.Instance.Get(SkinType.Head))?.hatPrefab, hatAnchor);
+        ApplyPrefab(ref back, db.Get(SkinManager.Instance.Get(SkinType.Back))?.backPrefab, backAnchor);
+        ApplyPrefab(ref trail, db.Get(SkinManager.Instance.Get(SkinType.Trail))?.trailPrefab, trailAnchor);
+    }
+
+    void ApplyOutfit(SkinData data)
+    {
+        if (data == null)
         {
-            Destroy(gameObject);
+            if (outfitRenderer != null)
+            {
+                outfitRenderer.sharedMesh = null;
+                outfitRenderer.material = null;
+                outfitRenderer.enabled = false;
+            }
             return;
         }
-    }
 
-    private void Start()
-    {
-        ApplyEquippedSkins();
-    }
-
-    private void OnEnable()
-    {
-        ApplyEquippedSkins();
-    }
-
-    public void ApplyEquippedSkins()
-    {
-        if (SkinManager.Instance == null) return;
-
-        foreach (SkinType type in System.Enum.GetValues(typeof(SkinType)))
+        // Apply outfit data
+        if (outfitRenderer != null)
         {
-            var skin = SkinManager.Instance.GetEquippedSkin(type);
-            if (skin != null)
-                ApplySkin(skin);
+            outfitRenderer.enabled = true;
+            outfitRenderer.sharedMesh = data.mesh;
+            outfitRenderer.material = data.material;
         }
     }
 
-    public void ApplySkin(SkinData data)
+    void ApplyPrefab(ref GameObject current, GameObject prefab, Transform anchor)
     {
-        switch (data.type)
+        if (current != null) Destroy(current);
+        if (prefab != null) current = Instantiate(prefab, anchor);
+    }
+
+    public void EnableSkin(SkinType type)
+    {
+        switch (type)
         {
             case SkinType.Outfit:
-                ApplyOutfitSkin(data);
+                if (outfitRenderer != null)
+                    outfitRenderer.enabled = true;
                 break;
             case SkinType.Head:
-                ReplaceChildPrefab(headParent, data.prefab);
+                if (head != null)
+                    head.SetActive(true);
                 break;
             case SkinType.Back:
-                ReplaceChildPrefab(backParent, data.prefab);
+                if (back != null)
+                    back.SetActive(true);
                 break;
             case SkinType.Trail:
-                ReplaceChildPrefab(trailParent, data.prefab);
+                if (trail != null)
+                    trail.SetActive(true);
                 break;
         }
     }
-
-    // ✅ Outfit chỉ đổi mesh & material
-    private void ApplyOutfitSkin(SkinData outfit)
+    public void DisableSkin(SkinType type)
     {
-        if (bodyRenderer == null)
+        switch (type)
         {
-            Debug.LogWarning("❌ Không tìm thấy Body Renderer trong Player!");
-            return;
+            case SkinType.Outfit:
+                if (outfitRenderer != null)
+                    outfitRenderer.enabled = false;
+                break;
+            case SkinType.Head:
+                if (head != null)
+                    head.SetActive(false);
+                break;
+            case SkinType.Back:
+                if (back != null)
+                    back.SetActive(false);
+                break;
+            case SkinType.Trail:
+                if (trail != null)
+                    trail.SetActive(false);
+                break;
         }
-
-        if (outfit.mesh != null)
-            bodyRenderer.sharedMesh = outfit.mesh;
-
-        if (outfit.material != null)
-            bodyRenderer.sharedMaterial = outfit.material;
-
-        Debug.Log($"🎽 Outfit {outfit.displayName} đã được áp.");
-    }
-
-    // Các slot khác vẫn dùng prefab
-    private void ReplaceChildPrefab(Transform parent, GameObject prefab)
-    {
-        if (parent == null) return;
-
-        foreach (Transform child in parent)
-            Destroy(child.gameObject);
-
-        if (prefab != null)
-            Instantiate(prefab, parent);
     }
 }

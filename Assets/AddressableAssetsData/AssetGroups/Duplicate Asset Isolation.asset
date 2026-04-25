@@ -1,0 +1,338 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Duplicate Asset Isolation
+  m_EditorClassIdentifier: 
+  m_GroupName: Duplicate Asset Isolation
+  m_GUID: 1890de63f19277446ac01a0483e03095
+  m_SerializeEntries:
+  - m_GUID: 048a74970ebb9d549990b8445a87cb02
+    m_Address: Assets/3D/Rude_fox/Rude_1.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 07b4d4d064c94d14a9751d035b2d0740
+    m_Address: Assets/Skin/10_2025/Snow_Fall/Trail/Trail_Shader.shadergraph
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 08d1b8d96d0600647a74e9907081353e
+    m_Address: Assets/Skin/10_2025/Snow_Fall/Trail/Shader Graphs_Trail_Shader.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 112c6f826a9f11f489785c4736859708
+    m_Address: Assets/Skin/10_2025/Snow_Fall/Snowfall_Skin_Texture_24_10_2025.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 12e5c8991545a2c4096551d0044306f0
+    m_Address: Assets/Skin/Material/Shader Graphs_Skin_Materail_Tranferant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1bef0a056a051454db68129b042d92af
+    m_Address: Assets/3D/FX/VFX_Brush_Eploxsive/VFX_Brush_Eploxsive_Texture_Source_Square.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1d5db83ccd01ed344b36d3747dfb5793
+    m_Address: Assets/Sprite/UI/Skip_Button.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 276d9e395ae18fe40a9b4988549f2349
+    m_Address: Packages/com.unity.visualeffectgraph/Textures/DefaultParticle.tga
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2c1e8c2de4dbfa04f81381f38822bcd8
+    m_Address: Assets/3D/Prop/Scene/Star_Scene.anim
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 31321ba15b8f8eb4c954353edc038b1d
+    m_Address: Packages/com.unity.render-pipelines.universal/Runtime/Materials/Lit.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3207f26ec7bbb1a469862604f81b9099
+    m_Address: Assets/3D/Prop/Scene/Token.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3593cd81223537b4bad1685c6ec2cffe
+    m_Address: Assets/3D/Prop/Goal/Goal_FX.vfx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 36292a8e8c2a8ca4b9f32f9a8814540d
+    m_Address: Assets/Sound/SFX/swipe-236674.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 36e335017ad71d54fbb10842863188ae
+    m_Address: Packages/com.unity.render-pipelines.core/Runtime/RenderPipelineResources/FallbackShader.shader
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 389081eb904f83d4981f8fa8ea92457e
+    m_Address: Assets/Sprite/UI/Next_Button.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3ebc51c81ed10d04fa7fa04e32549c87
+    m_Address: Assets/3D/Rude_fox/Animated/Rude_Hold.anim
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4687604d14d8d724fb7bb57a790f06cd
+    m_Address: Assets/3D/Material/Soil_Color/Soild_Color_Cycan.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4778049b97e590c499daba72d3798e4b
+    m_Address: Assets/Sprite/UI/Token.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4c24dde39d9c9b340bd9fa1755939134
+    m_Address: Assets/3D/Rude_fox/Shader/Rude_Fox_Shader.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4d0cbc89cd9c0584496c5f989ddba1ab
+    m_Address: Assets/Sound/SFX/ui-sounds-pack-2-sound-7-358894.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4de2e8f88595a7a4fa84fc1414754e7f
+    m_Address: Assets/3D/Prop/Scene/Transition_Scene.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 544393345510b064285d2b937030decf
+    m_Address: Assets/3D/Rude_fox/Animated/Main Animator.controller
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5c5fcabf1154cfd44a2bd99734e653d7
+    m_Address: Assets/3D/Prop/Goal/Shader Graphs_Goal_Shader.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5ceb238b0efc6384b83f1760eee04fd0
+    m_Address: Assets/3D/Prop/Scene/Scene_Transition.controller
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 636c4bc6377efc744876931a5e1d4be4
+    m_Address: Assets/Sprite/UI/Stars_Turtorail_Button.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 67a654126a1ca674989d3dba766745de
+    m_Address: Assets/3D/Texture/RGB Texture_2.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6b27649038598c84e907388ed8a92892
+    m_Address: Assets/3D/Rude_fox/Animated/Rude_Jump.anim
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6b5ee11218fa0344abb6be0307ad28a8
+    m_Address: Assets/3D/Rude_fox/Shader/Rude_Fox_Shader.shadergraph
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 72ee70ac94ad7d943bbadd7c9dca2a2f
+    m_Address: Assets/Skin/Basic/Basic/Trail_Basic_Material.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7bbbe09797b4f2e4093855f45f0a5d88
+    m_Address: Assets/3D/Material/Soil_Color/Soild_Color_Light_Pink.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 809aef73723c3b04ab09b1969c96da58
+    m_Address: Assets/3D/Material/Soil_Color/Texture_Soil_color 1.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 80b9b9cad0537fc4c8d5dde992a0497d
+    m_Address: Assets/Sprite/UI/Revive_Button.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8193140fa8345bc4285f64b36f9511e9
+    m_Address: Assets/3D/Prop/Trap/Wheal.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 84ae72aa4084f984296050eefa0c2121
+    m_Address: Assets/Sprite/UI/UI_Undo_Button.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 84b0811cc15c2ab4092b24ff77dae7f2
+    m_Address: Assets/3D/FX/VFX_Brush_Eploxsive/VFX_Brush_Eploxsive.vfx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 84fcff72ed2937047be6ca99d7b1351c
+    m_Address: Assets/3D/Prop/Goal/Goal Mesh.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8ef774bc3b2333047a0105fc66fd4ebf
+    m_Address: Assets/Sound/SFX/dingsound246413.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 933532a4fcc9baf4fa0491de14d08ed7
+    m_Address: Packages/com.unity.render-pipelines.universal/Shaders/Lit.shader
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 98b5834de6a032f49917f0533f81d430
+    m_Address: Assets/3D/Physic_Material/F_.3_B_.3.physicMaterial
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 997a43b767814dd0a7642ec9b78cba41
+    m_Address: Assets/TextMesh Pro/Examples & Extras/Fonts/Anton.ttf
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9da09814ef905d449b2847babad2e6cb
+    m_Address: Assets/3D/FX/VFX_Brush_Eploxsive/VFX_Brush_Eploxsive_Texture_Source_Halo.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a45df7da8a996224ea77d0630045e0d2
+    m_Address: Assets/3D/FX/VFX_Brush_Eploxsive/VFX_Brush_Eploxsive.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a56fa5959aaeb784ea404fd560c464be
+    m_Address: Assets/Skin/Material/Skin_Materail_Tranferant.shadergraph
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: acebf206d0f61ae4383690fece4e24af
+    m_Address: Assets/3D/Material/Soil_Color/Texture_Soil_color.shadergraph
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: adfe9e1e66dadf4439b7472981621849
+    m_Address: Assets/Scenes/Scene_Visual/Global Volume Profile.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b108abb43eb96794ca69bb6f23f09d9d
+    m_Address: Assets/3D/Prop/Layout/Cube.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bbbfd2f208896e54ebefdcc790fe7b88
+    m_Address: Assets/3D/Prop/Goal/Goal_Shader.shadergraph
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c731f98cb36bd5d4dabd4636dbd8b875
+    m_Address: Assets/Sprite/UI/Main_Pannel.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c7a257abac975754081c3d7215bc25a3
+    m_Address: Assets/3D/Rude_fox/Animated/Rude_Idiel.anim
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c9de320dd99f0c34da06df22a3c469ee
+    m_Address: Assets/3D/Prop/Scene/End_Scene.anim
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d28288db8ce9a784da0958ea9ea7ad2d
+    m_Address: Assets/3D/Rude_fox/Texture/Rude_Fox_UV_Color.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d4dc497240a22d74080e8a013e8f28bf
+    m_Address: Assets/Sprite/UI/Reset_Button.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: de56ca902f17fa742a32a799ee879939
+    m_Address: Assets/Skin/10_2025/Snow_Fall/Back/Snow_Fall_Back_10_2025.mesh
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: de84ff16b6d9e80458e638d3a38e4a6f
+    m_Address: Assets/3D/Prop/Trap/Thorn.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e1fe00952758a6d45a08e611144c2b6e
+    m_Address: Assets/Sprite/UI/Try_Again.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e3265ab4bf004d28a9537516768c1c75
+    m_Address: Assets/TextMesh Pro/Fonts/LiberationSans.ttf
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e4757b5e792777a418798b0411384709
+    m_Address: Assets/Sprite/UI/UI_Reset_Button.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e6e9a19c3678ded42a3bc431ebef7dbd
+    m_Address: Packages/com.unity.render-pipelines.universal/Shaders/Utils/FallbackError.shader
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f113724212710d34c8aefc78ada32fbf
+    m_Address: Assets/3D/Material/Soil_Color/Soil_Color.shadergraph
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f83d515e6fb87db4785684454f8b89a9
+    m_Address: Assets/Sound/SFX/electronic-game3-332871.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f8b1f427afc1da24795a4641b21c4509
+    m_Address: Assets/Sound/SFX/purchase-succesful-ingame-230550.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fa9a36a8edbe399429642cb5ab47d8bb
+    m_Address: Assets/Sprite/UI/Enough_Button.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fe393ace9b354375a9cb14cdbbc28be4
+    m_Address: Assets/TextMesh Pro/Shaders/TMP_SDF-Mobile.shader
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 38c975b249eaef945ab26384362c7832, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 710ab414eb270574ebe60b780e901d19, type: 2}
+    - {fileID: 11400000, guid: c253dc79e1681db468274cf32ab96d12, type: 2}

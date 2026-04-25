@@ -11,10 +11,15 @@ public class SkinUIElement : MonoBehaviour
     public Button actionButton;
     public TextMeshProUGUI buttonText;
     public GameObject TokenIcon;
+    private SkinInventory inventory => SkinInventory.Instance;
 
     private SkinData skinData;
     private Sprite fallbackCreatedSprite;
 
+    public void Awake()
+    {
+        // removed static Instance: there are many UI elements, don't use a single shared Instance
+    }
     public void Setup(SkinData data)
     {
         skinData = data;
@@ -25,7 +30,7 @@ public class SkinUIElement : MonoBehaviour
         {
             iconImage.sprite = data.icon;
         }
-        
+
         RefreshState();
     }
 
@@ -34,47 +39,71 @@ public class SkinUIElement : MonoBehaviour
     public void RefreshState()
     {
         if (skinData == null) return;
+        if (inventory == null)
+        {
+            Debug.LogWarning("SkinUIElement.RefreshState: SkinInventory.Instance is null");
+            return;
+        }
 
-        bool unlocked = SkinManager.Instance.IsUnlocked(skinData.skinId);
-        var equipped = SkinManager.Instance.GetEquippedSkin(skinData.type);
-        bool isEquipped = equipped != null && equipped.skinId == skinData.skinId;
-
+        bool unlocked = inventory.IsOwned(skinData.skinID);
+        bool isEquipped = SkinManager.Instance != null && SkinManager.Instance.Get(skinData.type) == skinData.skinID;
 
         if (TokenIcon != null)
             TokenIcon.SetActive(!unlocked);
-        // reset button listeners + interactable
+
         actionButton.onClick.RemoveAllListeners();
         actionButton.interactable = true;
 
         if (!unlocked)
         {
             buttonText.text = "Unlock";
-            actionButton.onClick.AddListener(UnlockSkin);
+            actionButton.onClick.AddListener(() => Unlock());
         }
         else if (!isEquipped)
         {
             buttonText.text = "Equip";
-            actionButton.onClick.AddListener(EquipSkin);
-            
+            actionButton.onClick.AddListener(() => Equip());
         }
         else
         {
-            buttonText.text = "Equipped";
-            actionButton.interactable = false;
+            buttonText.text = "Unequip";
+            actionButton.onClick.AddListener(() => Unequip());
         }
     }
 
 
-    private void UnlockSkin()
+    private void Unlock()
     {
-        actionButton.interactable = false;
-        SkinManager.Instance.UnlockSkin(skinData);
+        actionButton.interactable = false; // disable to prevent double clicks
+
+        SkinUnlockService.Instance.Unlock(skinData, success =>
+        {
+            // Always re-enable so user isn't stuck; UI will immediately refresh on success
+            actionButton.interactable = true;
+
+            if (success)
+            {
+                // repopulate so states reflect new ownership
+                if (SkinShopUI.Instance != null)
+                    SkinShopUI.Instance.PopulateShopByType(skinData.type);
+            }
+            else
+            {
+                // On failure keep UI consistent and refresh state (shows tokens/give feedback)
+                RefreshState();
+            }
+        });
+    }
+
+    private void Equip()
+    {
+        SkinManager.Instance.Equip(skinData);
         RefreshState();
     }
 
-    private void EquipSkin()
+    private void Unequip()
     {
-        SkinManager.Instance.EquipSkin(skinData);
+        SkinManager.Instance.Unquip(skinData);
         RefreshState();
     }
 }

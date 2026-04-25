@@ -341,11 +341,18 @@ public class PlayerController : MonoBehaviour
         // Reset mesh
         if (meshRenderer != null) meshRenderer.enabled = true;
 
+        PlayerSkinApplier.Instance.EnableSkin(SkinType.Outfit);
+        PlayerSkinApplier.Instance.EnableSkin(SkinType.Head);
+        PlayerSkinApplier.Instance.EnableSkin(SkinType.Back);
+        PlayerSkinApplier.Instance.EnableSkin(SkinType.Trail);
+
+
         // Animator về idle
         SetAnimatorState(isJump: false, isHold: false, isIdle: true);
 
         Debug.Log("Đã revive tại vị trí an toàn");
         StartCoroutine(EnablePhysicsNextFrame());
+        GameManager.Instance.is_Timing = true;
     }
 
 
@@ -361,11 +368,35 @@ public class PlayerController : MonoBehaviour
         // Tắt điều khiển và mesh
         Disableplayer = true;
         if (meshRenderer != null) meshRenderer.enabled = false;
+        PlayerSkinApplier.Instance.DisableSkin(SkinType.Outfit);
+        PlayerSkinApplier.Instance.DisableSkin(SkinType.Head);
+        PlayerSkinApplier.Instance.DisableSkin(SkinType.Back);
+        PlayerSkinApplier.Instance.DisableSkin(SkinType.Trail);
+        if (ReviveManager.Instance.HasRevived())
+        {
+            if (loadSceneCoroutine == null)
+            {
+                loadSceneCoroutine = StartCoroutine(LoadSceneAfterDelay(() =>
+                {
+                    //Debug.LogWarning("Không tìm thấy UIManager hoặc revivePanel - reload scene trực tiếp.");
+                    GameManager.Instance.RestartLevel();
+                }));
+            }
+        }
 
         // Gọi UI revive nếu có và hợp lệ
-        if (UIManager.Instance != null && UIManager.Instance.revivePanel != null)
+        if (UIManager.Instance != null && UIManager.Instance.revivePanel != null && !Boots_Level.Instance.NoAds )
         {
-            StartCoroutine(WailTime());
+            if (loadSceneCoroutine == null)
+            {
+                loadSceneCoroutine = StartCoroutine(LoadSceneAfterDelay(() =>
+                {
+                    UIManager.Instance.ShowReviveOption();
+                    
+
+
+                }));
+            }
 
         }
         else
@@ -407,19 +438,24 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator LoadSceneAfterDelay(System.Action onComplete)
     {
+        GameManager.Instance.is_Timing = false;
         float timer = 0f;
         while (timer < MaxcountLoadscene)
         {
             timer += Time.deltaTime;
             yield return null;
         }
+        loadSceneCoroutine = null;
         onComplete?.Invoke();
+        
     }
 
     IEnumerator WailTime()
     {
         yield return new WaitForSeconds(1f);
         UIManager.Instance.ShowReviveOption();
+        
+        
     }
 
     private IEnumerator EnablePhysicsNextFrame()
@@ -433,6 +469,6 @@ public class PlayerController : MonoBehaviour
         if (myAnimator == null) return;
         if (isHold.HasValue) myAnimator.SetBool("isHold", isHold.Value);
         if (isJump.HasValue) myAnimator.SetBool("isJump", isJump.Value);
-        if (isIdle.HasValue) myAnimator.SetBool("isIdle", isIdle.Value); // sửa "isIdel" -> "isIdle"
+        if (isIdle.HasValue) myAnimator.SetBool("isIdle", isIdle.Value); 
     }
 }

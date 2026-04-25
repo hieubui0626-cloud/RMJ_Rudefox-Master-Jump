@@ -3,7 +3,7 @@
     "m_SelectedProcess": {
         "deviceId": "R58W20K5EHV",
         "name": "com.Kizzul.RMJ",
-        "processId": 32367,
+        "processId": 25217,
         "exited": false
     },
     "m_SelectedPriority": 4,
@@ -11,31 +11,43 @@
         {
             "deviceId": "R58W20K5EHV",
             "name": "com.Kizzul.RMJ",
-            "processId": 25110,
+            "processId": 17575,
+            "exited": true
+        },
+        {
+            "deviceId": "R58W20K5EHV",
+            "name": "com.google.android.packageinstaller",
+            "processId": 19695,
+            "exited": false
+        },
+        {
+            "deviceId": "R58W20K5EHV",
+            "name": "com.Kizzul.RMJ",
+            "processId": 20175,
             "exited": true
         },
         {
             "deviceId": "R58W20K5EHV",
             "name": "com.Kizzul.RMJ",
-            "processId": 5301,
+            "processId": 22484,
+            "exited": true
+        },
+        {
+            "deviceId": "R58W20K5EHV",
+            "name": "com.sec.android.app.launcher",
+            "processId": 1832,
+            "exited": false
+        },
+        {
+            "deviceId": "R58W20K5EHV",
+            "name": "com.Kizzul.RMJ",
+            "processId": 23742,
             "exited": true
         },
         {
             "deviceId": "R58W20K5EHV",
             "name": "com.Kizzul.RMJ",
-            "processId": 24960,
-            "exited": true
-        },
-        {
-            "deviceId": "R58W20K5EHV",
-            "name": "com.Kizzul.RMJ",
-            "processId": 28777,
-            "exited": true
-        },
-        {
-            "deviceId": "R58W20K5EHV",
-            "name": "com.Kizzul.RMJ",
-            "processId": 32367,
+            "processId": 25217,
             "exited": false
         }
     ],
@@ -94,7 +106,7 @@
     },
     "m_FilterOptions": {
         "m_Filter": "",
-        "m_UseRegularExpressions": true,
+        "m_UseRegularExpressions": false,
         "m_MatchCase": false
     },
     "m_SymbolPaths": [],

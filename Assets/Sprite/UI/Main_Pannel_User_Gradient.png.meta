@@ -126,10 +126,10 @@ TextureImporter:
       name: Main_Pannel_User_Gradient_0
       rect:
         serializedVersion: 2
-        x: 31
+        x: 0
         y: 22
-        width: 538
-        height: 593
+        width: 536
+        height: 549
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -148,10 +148,10 @@ TextureImporter:
       name: Main_Pannel_User_Gradient_1
       rect:
         serializedVersion: 2
-        x: 31
-        y: 21
+        x: 0
+        y: 0
         width: 536
-        height: 596
+        height: 571
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

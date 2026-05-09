@@ -33,7 +33,7 @@ public class SkinManager : MonoBehaviour
         OnSkinChanged?.Invoke();
     }
 
-    public void Unquip(SkinData skin)
+    public void Unequip(SkinData skin)
     {
         if (skin == null) return;
 

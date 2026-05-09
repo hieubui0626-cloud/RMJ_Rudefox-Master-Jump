@@ -8,6 +8,8 @@ TagManager:
   - Goal
   - Ground
   - Token
+  - VFX_Hit
+  - VFX_Dead
   layers:
   - Default
   - TransparentFX

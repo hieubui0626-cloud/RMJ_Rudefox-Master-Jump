@@ -186,7 +186,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 84b0811cc15c2ab4092b24ff77dae7f2
-    m_Address: Assets/3D/FX/VFX_Brush_Eploxsive/VFX_Brush_Eploxsive.vfx
+    m_Address: Assets/3D/FX/VFX_Dead/VFX_Dead.vfx
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -217,11 +217,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9da09814ef905d449b2847babad2e6cb
     m_Address: Assets/3D/FX/VFX_Brush_Eploxsive/VFX_Brush_Eploxsive_Texture_Source_Halo.png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a45df7da8a996224ea77d0630045e0d2
-    m_Address: Assets/3D/FX/VFX_Brush_Eploxsive/VFX_Brush_Eploxsive.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

@@ -12,8 +12,9 @@ public class PlayerController : MonoBehaviour
     public float targetForce;
     //public float maxCharge;
     public float forecAmount;
-    public int GroundCount;
-    public int GroundCountThreshold;
+    public float GroundCountTime;
+    public float GroundCountTimeMax;
+
 
     [Header("Sound Setting")]
     public AudioClip SFX_Hold;
@@ -28,7 +29,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("UI & Effects")]
     public LineRenderer lineRenderer;
-    public GameObject FX_Death_Prefab;
+    public GameObject Hit_Slot;
+    public GameObject Dead_Slot;
 
     [Header("Scene Control")]
     public float MaxcountLoadscene;
@@ -63,6 +65,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+
         smoothEndPos = transform.position;
         rb = GetComponent<Rigidbody>();
         lastYposition = transform.position.y;
@@ -267,18 +270,9 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionStay(Collision collision)
     {
-        if (collision.collider.CompareTag("Trap"))
-        {
-            
-            HandleTrapCollision();
-            return;
-        }
+        
+        
 
-        // grounded detection an toàn hơn
-        if (collision.collider.CompareTag("Ground"))
-        {
-            isGrounded = true;
-        }
 
         if (rudeTransform != null && !isCharging)
         {
@@ -294,6 +288,21 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
+
+        if (!isGrounded && other.CompareTag("Ground"))
+        {
+            GroundCountTime += Time.deltaTime;
+            if (GroundCountTime >= GroundCountTimeMax)
+            {
+                isGrounded = true;
+                GroundCountTime = 0; // giữ ở max để tránh tràn
+                SetAnimatorState(isJump: false, isHold: false, isIdle: true);
+                isGrounded = true;
+
+                
+            }
+        }
+
         if (other.CompareTag("Goal"))
         {
             
@@ -301,18 +310,56 @@ public class PlayerController : MonoBehaviour
         }
         
     }
-    void OnCollisionEnter(Collision other)
+    
+     void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.CompareTag("Ground"))
         {
-            FindObjectOfType<Tutorial_Manager>()?.PlayerLanded();
+
+
+            ContactPoint contact = other.contacts[0];
+            Vector3 contactPoint = contact.point;
+            Vector3 surfaceNormal = contact.normal;
+            Transform fxTransform = null;
+            foreach (Transform child in Hit_Slot.GetComponentsInChildren<Transform>(true))
+            {
+                if (child.CompareTag("VFX_Hit"))
+                {
+                    fxTransform = child;
+                    break;
+                }
+            }
+
+
+            if (fxTransform != null)
+            {
+                GameObject FX_Hit_Prefab = fxTransform.gameObject;
+                GameObject hitEffect = Instantiate(FX_Hit_Prefab, contactPoint, Quaternion.FromToRotation(-Vector3.forward, surfaceNormal));
+                hitEffect.transform.localScale = Vector3.one;
+                Destroy(hitEffect, 1.25f);
+            }
+            else
+            {
+                Debug.LogError("Không tìm thấy đối tượng với tên đó!");
+            }
+
+            //FindObjectOfType<Tutorial_Manager>()?.PlayerLanded();
         }
+        if (other.gameObject.CompareTag("Trap"))
+        {
+            HandleTrapCollision();
+            return;
+        }
+
     }
+     
+
 
     private void OnCollisionExit(Collision collision)
     {
         if (collision.collider.CompareTag("Ground"))
         {
+            GroundCountTime = 0f;
             isGrounded = false;
             SetAnimatorState(isJump: true, isHold: false, isIdle: false);
         }
@@ -359,11 +406,31 @@ public class PlayerController : MonoBehaviour
 
     private void HandleTrapCollision()
     {
+        
         if (Disableplayer) return;
 
         audioSource.PlayOneShot(SFX_Trap);
         // FX chết
-        Instantiate(FX_Death_Prefab, transform.position + Vector3.up, Quaternion.identity);
+        Transform fxTransform = null;
+        foreach (Transform child in Dead_Slot.GetComponentsInChildren<Transform>(true))
+        {
+            if (child.CompareTag("VFX_Dead"))
+            {
+                fxTransform = child;
+                break;
+            }
+        }
+
+        if (fxTransform != null)
+        {
+            GameObject FX_Death_Prefab = fxTransform.gameObject;
+            GameObject DeadEffect = Instantiate(FX_Death_Prefab, transform.position + Vector3.up, Quaternion.identity);
+            DeadEffect.transform.localScale = Vector3.one;
+        }
+        else
+        {
+            Debug.LogError("Không tìm thấy đối tượng với tên đó!");
+        }
 
         // Tắt điều khiển và mesh
         Disableplayer = true;
@@ -371,7 +438,7 @@ public class PlayerController : MonoBehaviour
         PlayerSkinApplier.Instance.DisableSkin(SkinType.Outfit);
         PlayerSkinApplier.Instance.DisableSkin(SkinType.Head);
         PlayerSkinApplier.Instance.DisableSkin(SkinType.Back);
-        PlayerSkinApplier.Instance.DisableSkin(SkinType.Trail);
+        
         if (ReviveManager.Instance.HasRevived())
         {
             if (loadSceneCoroutine == null)
@@ -385,7 +452,8 @@ public class PlayerController : MonoBehaviour
         }
 
         // Gọi UI revive nếu có và hợp lệ
-        if (UIManager.Instance != null && UIManager.Instance.revivePanel != null && !Boots_Level.Instance.NoAds )
+        //if (UIManager.Instance != null && UIManager.Instance.revivePanel != null && !Boots_Level.Instance.NoAds )
+        if (UIManager.Instance != null && UIManager.Instance.revivePanel != null)
         {
             if (loadSceneCoroutine == null)
             {
@@ -449,6 +517,7 @@ public class PlayerController : MonoBehaviour
         onComplete?.Invoke();
         
     }
+    
 
     IEnumerator WailTime()
     {

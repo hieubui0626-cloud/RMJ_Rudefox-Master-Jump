@@ -103,7 +103,7 @@ public class SkinUIElement : MonoBehaviour
 
     private void Unequip()
     {
-        SkinManager.Instance.Unquip(skinData);
+        SkinManager.Instance.Unequip(skinData);
         RefreshState();
     }
 }

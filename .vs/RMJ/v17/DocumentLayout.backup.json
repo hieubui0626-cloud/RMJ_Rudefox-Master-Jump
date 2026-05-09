@@ -3,16 +3,8 @@
   "WorkspaceRootPath": "D:\\software\\Unity\\RMJ\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{61D1B1A0-9966-1EE9-9C9F-C16C57A38AF7}|Assembly-CSharp.csproj|d:\\software\\unity\\rmj\\assets\\script\\game_manager\\skin\\skinmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{61D1B1A0-9966-1EE9-9C9F-C16C57A38AF7}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\game_manager\\skin\\skinmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{61D1B1A0-9966-1EE9-9C9F-C16C57A38AF7}|Assembly-CSharp.csproj|d:\\software\\unity\\rmj\\assets\\script\\game_manager\\skin\\playerskinapplier.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{61D1B1A0-9966-1EE9-9C9F-C16C57A38AF7}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\game_manager\\skin\\playerskinapplier.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{61D1B1A0-9966-1EE9-9C9F-C16C57A38AF7}|Assembly-CSharp.csproj|d:\\software\\unity\\rmj\\assets\\script\\game_manager\\skin\\skinuielement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{61D1B1A0-9966-1EE9-9C9F-C16C57A38AF7}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\game_manager\\skin\\skinuielement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{61D1B1A0-9966-1EE9-9C9F-C16C57A38AF7}|Assembly-CSharp.csproj|d:\\software\\unity\\rmj\\assets\\script\\game_play\\player\\player_controller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{61D1B1A0-9966-1EE9-9C9F-C16C57A38AF7}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\game_play\\player\\player_controller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -27,40 +19,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "SkinManager.cs",
-              "DocumentMoniker": "D:\\software\\Unity\\RMJ\\Assets\\Script\\Game_Manager\\Skin\\SkinManager.cs",
-              "RelativeDocumentMoniker": "Assets\\Script\\Game_Manager\\Skin\\SkinManager.cs",
-              "ToolTip": "D:\\software\\Unity\\RMJ\\Assets\\Script\\Game_Manager\\Skin\\SkinManager.cs",
-              "RelativeToolTip": "Assets\\Script\\Game_Manager\\Skin\\SkinManager.cs",
-              "ViewState": "AgIAABoAAAAAAAAAAAAgwC0AAAAFAAAAAAAAAA==",
+              "Title": "Player_Controller.cs",
+              "DocumentMoniker": "D:\\software\\Unity\\RMJ\\Assets\\Script\\Game_Play\\Player\\Player_Controller.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\Game_Play\\Player\\Player_Controller.cs",
+              "ToolTip": "D:\\software\\Unity\\RMJ\\Assets\\Script\\Game_Play\\Player\\Player_Controller.cs",
+              "RelativeToolTip": "Assets\\Script\\Game_Play\\Player\\Player_Controller.cs",
+              "ViewState": "AgIAAEcBAAAAAAAAAAAswE4BAABlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-23T12:07:26.421Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "SkinUIElement.cs",
-              "DocumentMoniker": "D:\\software\\Unity\\RMJ\\Assets\\Script\\Game_Manager\\Skin\\SkinUIElement.cs",
-              "RelativeDocumentMoniker": "Assets\\Script\\Game_Manager\\Skin\\SkinUIElement.cs",
-              "ToolTip": "D:\\software\\Unity\\RMJ\\Assets\\Script\\Game_Manager\\Skin\\SkinUIElement.cs",
-              "RelativeToolTip": "Assets\\Script\\Game_Manager\\Skin\\SkinUIElement.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAzwGQAAAAXAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-23T12:00:58.831Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "PlayerSkinApplier.cs",
-              "DocumentMoniker": "D:\\software\\Unity\\RMJ\\Assets\\Script\\Game_Manager\\Skin\\PlayerSkinApplier.cs",
-              "RelativeDocumentMoniker": "Assets\\Script\\Game_Manager\\Skin\\PlayerSkinApplier.cs",
-              "ToolTip": "D:\\software\\Unity\\RMJ\\Assets\\Script\\Game_Manager\\Skin\\PlayerSkinApplier.cs",
-              "RelativeToolTip": "Assets\\Script\\Game_Manager\\Skin\\PlayerSkinApplier.cs",
-              "ViewState": "AgIAABsAAAAAAAAAAAAIwDEAAAAyAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-14T13:35:31.791Z",
+              "WhenOpened": "2026-05-03T16:37:25.098Z",
               "EditorCaption": ""
             }
           ]

@@ -35,6 +35,14 @@ public class Button_UI : MonoBehaviour
         SceneManager.LoadScene(sceneToLoad.ToString());
 
     }
+    public void OpenPanel()
+    {
+        Pannel.SetActive(true);
+    }
+    public void ClosePanel()
+    {
+        Pannel.SetActive(false);
+    }
     public void loadsceneStart()
     {
         SceneManager.LoadScene(sceneStart.ToString());

@@ -53,7 +53,7 @@ public class Object_Animated : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Player") && moveX)
+        if (collision.gameObject.CompareTag("Player"))
         {
             collision.transform.SetParent(transform);
         }

@@ -494,7 +494,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 715766882}
         m_TargetAssemblyTypeName: Button_UI, Assembly-CSharp
-        m_MethodName: ClosePannel
+        m_MethodName: ClosePanel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -558,6 +558,10 @@ MonoBehaviour:
   sceneStart: 0
   ButtonStart: {fileID: 0}
   Pannel: {fileID: 238534060}
+  StorePannel: {fileID: 0}
+  StoreDisableObjects: []
+  posBase: {x: 0, y: 0, z: 0}
+  posZoom: {x: 0, y: 0, z: 0}
 --- !u!1001 &886129843
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -760,8 +764,8 @@ MonoBehaviour:
   SignOutButton: {fileID: 1956508861}
   Userid: {fileID: 1908154880}
   boots_done: 0
-  Test: 1
-  Replace_GGAds_by_UnityAds: 0
+  Test: 0
+  Replace_GGAds_by_UnityAds: 1
   NoAds: 0
 --- !u!114 &894504352
 MonoBehaviour:
@@ -1526,7 +1530,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1549738541
@@ -1998,7 +2002,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1956508866}
         m_TargetAssemblyTypeName: Button_UI, Assembly-CSharp
-        m_MethodName: OpenPannel
+        m_MethodName: OpenPanel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2062,6 +2066,10 @@ MonoBehaviour:
   sceneStart: 0
   ButtonStart: {fileID: 0}
   Pannel: {fileID: 238534060}
+  StorePannel: {fileID: 0}
+  StoreDisableObjects: []
+  posBase: {x: 0, y: 0, z: 0}
+  posZoom: {x: 0, y: 0, z: 0}
 --- !u!4 &6987198284890655898 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6987198285776750633, guid: 0bd9083207e350d4ab0cac7d36d9f8be, type: 3}

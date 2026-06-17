@@ -15,7 +15,7 @@ public class FirebaseManager : MonoBehaviour
     /// UID hiện tại: ưu tiên Firebase UID nếu đã login,
     /// fallback về guest_xxx khi chưa login.
     /// </summary>
-    private string PlayerId
+    public string PlayerId
     {
         get
         {
@@ -281,7 +281,8 @@ public class FirebaseManager : MonoBehaviour
 
     public void LoadPlayerSkinData(Action<int, List<string>, Dictionary<SkinType, string>> callback)
     {
-        dbRef.Child("players").Child(PlayerId).GetValueAsync().ContinueWithOnMainThread(task => {
+        dbRef.Child("players").Child(PlayerId).GetValueAsync().ContinueWithOnMainThread(task =>
+        {
             if (task.IsCompleted && !task.IsFaulted)
             {
                 DataSnapshot snap = task.Result;
@@ -317,6 +318,51 @@ public class FirebaseManager : MonoBehaviour
             }
         });
     }
+
+    #endregion
+
+    #region Height System
+    public void SaveBestHeight(string levelName, float height)
+    {
+        PlayerPrefs.SetFloat("EndlessBestHeight", height);
+        PlayerPrefs.Save();
+
+        if (dbRef != null)
+        {
+            dbRef.Child("players")
+                 .Child(PlayerId)
+                 .Child("endless")
+                 .Child("bestHeight")
+                 .SetValueAsync(height);
+        }
+    }
+
+    public void LoadBestHeight(string levelName, Action<float> callback)
+    {
+        if (dbRef == null)
+        {
+            callback(PlayerPrefs.GetFloat("EndlessBestHeight", -1f));
+            return;
+        }
+        dbRef.Child("players")
+             .Child(PlayerId)
+             .Child("endless")
+             .Child("bestHeight")
+             .GetValueAsync()
+             .ContinueWithOnMainThread(task =>
+             {
+                 if (task.IsCompleted && task.Result.Exists)
+                 {
+                     callback(float.Parse(task.Result.Value.ToString()));
+                 }
+                 else
+                 {
+                     callback(PlayerPrefs.GetFloat("EndlessBestHeight", -1f));
+                 }
+             });
+
+    }
+
 
     #endregion
 }

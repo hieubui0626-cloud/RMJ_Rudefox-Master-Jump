@@ -50,13 +50,15 @@ public class GoogleFirebaseAuth : MonoBehaviour
         if (IsSignedIn())
         {
             Debug.Log("✅ User signed in: " + user.DisplayName);
-            Boots_Level.Instance.Userid.text = "User Id: " + user.DisplayName;
+            Boots_Level.Instance.User.text = "User: " + user.DisplayName;
+            Boots_Level.Instance.ID.text = "ID: " + FirebaseManager.Instance.PlayerId;
             Boots_Level.Instance.SignOutButton.SetActive(true);
         }
         else if (!isSigningOut)
         {
             Debug.Log("⚠ User signed out");
-            Boots_Level.Instance.Userid.text = "User Id: Guest";
+            Boots_Level.Instance.User.text = "User: Guest" + FirebaseManager.Instance.PlayerId;
+            Boots_Level.Instance.ID.text = "ID: Guest" + FirebaseManager.Instance.PlayerId;
             StartCoroutine(SignOutWaitTime());
         }
     }

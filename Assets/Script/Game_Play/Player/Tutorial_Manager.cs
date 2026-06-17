@@ -28,8 +28,10 @@ public class Tutorial_Manager : MonoBehaviour
     public void OnAcceptTutorial()
     {
         tutorialText.text = "Press And Hold";
+        tutorialText.color = Color.white;
         currentStep = TutorialStep.HoldPress;
         tutorialUIPopup.SetActive(false);
+        TextObject.SetActive(true);
         Time.timeScale = 1f; // resume game
     }
 
@@ -39,7 +41,7 @@ public class Tutorial_Manager : MonoBehaviour
         tutorialUIPopup.SetActive(false);
         currentStep = TutorialStep.Complete; // Bỏ qua tutorial
         Time.timeScale = 1f;
-        TextObject.SetActive(false);
+        
     }
 
     void Update()
@@ -59,14 +61,15 @@ public class Tutorial_Manager : MonoBehaviour
             case TutorialStep.DragDirection:
                 if (InputManager.IsInputHeld())
                 {
-                    
-                    // Tăng lực giữ
-                    // (logic update arrow + powerBarHint)
+                    //do something to show direction (optional)
+
                 }
                 if (InputManager.IsInputUp())
                 {
+                    
                     tutorialText.text = "Release to Jump";
                     currentStep = TutorialStep.ReleaseJump;
+                    
                 }
                 break;
 

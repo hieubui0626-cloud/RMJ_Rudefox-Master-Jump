@@ -20,4 +20,5 @@ public enum SceneList
     W1_13,
     W1_14,
     W1_15,
+    Endless,
 }

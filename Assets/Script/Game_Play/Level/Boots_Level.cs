@@ -11,7 +11,8 @@ public class Boots_Level : MonoBehaviour
     public SceneList sceneLogin;
     public GameObject LoginButton;
     public GameObject SignOutButton;
-    public TextMeshProUGUI Userid;
+    public TextMeshProUGUI User;
+    public TextMeshProUGUI ID;
     public bool boots_done;
     public bool Test;
     public bool Replace_GGAds_by_UnityAds;

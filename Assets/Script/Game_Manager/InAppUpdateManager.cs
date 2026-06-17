@@ -35,18 +35,18 @@ public class InAppUpdateManager : MonoBehaviour
         }
         else 
         {
-            if (Boots_Level.Instance.Replace_GGAds_by_UnityAds)
-            {
-
-                Debug.Log("Running outside Play Store → Using Firebase Remote Config");
-                StartCoroutine(CheckForUpdate_Firebase());
-
-            }
-            else
+            // 2. Nếu chạy trên máy thật, kiểm tra xem có phải bản build từ Google Play không
+            if (IsRunningFromPlayStore())
             {
                 Debug.Log("Running from Google Play → Using Play App Update");
                 appUpdateManager = new AppUpdateManager();
                 StartCoroutine(CheckForUpdate_CHPlay());
+            }
+            else
+            {
+                // Dự phòng: Nếu cài từ APK ngoài, các store khác -> Dùng Firebase
+                Debug.Log("Running outside Play Store (Sideloaded APK) → Using Firebase Remote Config");
+                StartCoroutine(CheckForUpdate_Firebase());
             }
         }
         
@@ -172,7 +172,33 @@ public class InAppUpdateManager : MonoBehaviour
     #region -------- Utility --------
     private bool IsRunningFromPlayStore()
     {
-        return Application.identifier.StartsWith("com.");
+#if UNITY_ANDROID && !UNITY_EDITOR
+    try
+    {
+        using (var playerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+        {
+            using (var currentActivity = playerClass.GetStatic<AndroidJavaObject>("currentActivity"))
+            {
+                using (var packageManager = currentActivity.Call<AndroidJavaObject>("getPackageManager"))
+                {
+                    string packageName = currentActivity.Call<string>("getPackageName");
+                    // Lấy tên của ứng dụng đã cài đặt game này
+                    string installerName = packageManager.Call<string>("getInstallerPackageName", packageName);
+                    
+                    // Nếu nguồn cài đặt là com.android.vending -> Đích thị là từ Google Play Store
+                    return installerName == "com.android.vending";
+                }
+            }
+        }
+    }
+    catch (System.Exception e)
+    {
+        Debug.LogWarning("Không lấy được nguồn cài đặt: " + e.Message);
+        return false;
+    }
+#else
+        return false;
+#endif
     }
     #endregion
 

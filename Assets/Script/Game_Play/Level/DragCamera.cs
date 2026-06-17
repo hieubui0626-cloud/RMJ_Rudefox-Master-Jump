@@ -9,10 +9,13 @@ public class DragCamera : MonoBehaviour
     // Giới hạn di chuyển (theo trục X và Z trong không gian World)
     public Vector2 minLimit = new Vector2(-10, -10);
     public Vector2 maxLimit = new Vector2(10, 10);
+    public float maxZoomIn;
+    public float maxZoomOut;
 
     private Camera cam;
     private Vector3 lastInputPosition;
     private bool isDragging;
+    public bool canDrag = true; // Biến để kiểm soát khả năng kéo camera
 
     void Start()
     {
@@ -28,30 +31,39 @@ public class DragCamera : MonoBehaviour
 
     void Update()
     {
-        if (InputManager.IsInputDown())
+        if (canDrag)
         {
-            lastInputPosition = InputManager.GetInputPosition();
-            isDragging = true;
+            if (InputManager.IsInputDown())
+            {
+                lastInputPosition = InputManager.GetInputPosition();
+                isDragging = true;
+            }
+            else if (InputManager.IsInputHeld() && isDragging)
+            {
+                Vector3 currentInputPosition = InputManager.GetInputPosition();
+                Vector3 delta = cam.ScreenToViewportPoint(lastInputPosition - currentInputPosition);
+
+                // Di chuyển theo trục X và Z
+                Vector3 move = new Vector3(delta.x * dragSpeed, 0, delta.y * dragSpeed);
+                cam.transform.position += move;
+                ClampCameraPosition();
+
+                lastInputPosition = currentInputPosition;
+
+                PlayerPrefs.SetFloat("Levelmap_CamX", cam.transform.position.x);
+                PlayerPrefs.SetFloat("Levelmap_CamY", cam.transform.position.y);
+                PlayerPrefs.SetFloat("Levelmap_CamZ", cam.transform.position.z);
+            }
+            else if (InputManager.IsInputUp())
+            {
+                isDragging = false;
+            }
         }
-        else if (InputManager.IsInputHeld() && isDragging)
+        
+        float zoomDelta = InputManager.GetZoomDelta();
+        if (zoomDelta != 0f)
         {
-            Vector3 currentInputPosition = InputManager.GetInputPosition();
-            Vector3 delta = cam.ScreenToViewportPoint(lastInputPosition - currentInputPosition);
-
-            // Di chuyển theo trục X và Z
-            Vector3 move = new Vector3(delta.x * dragSpeed, 0 , delta.y * dragSpeed);
-            cam.transform.position += move;
-            ClampCameraPosition();
-
-            lastInputPosition = currentInputPosition;
-
-            PlayerPrefs.SetFloat("Levelmap_CamX", cam.transform.position.x);
-            PlayerPrefs.SetFloat("Levelmap_CamY", cam.transform.position.y);
-            PlayerPrefs.SetFloat("Levelmap_CamZ", cam.transform.position.z);
-        }
-        else if (InputManager.IsInputUp())
-        {
-            isDragging = false;
+            cam.fieldOfView = Mathf.Clamp(cam.fieldOfView - zoomDelta * 5, maxZoomIn, maxZoomOut);
         }
     }
 

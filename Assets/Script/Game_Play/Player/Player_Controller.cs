@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class PlayerController : MonoBehaviour
     public float forecAmount;
     public float GroundCountTime;
     public float GroundCountTimeMax;
+    
+    
 
 
     [Header("Sound Setting")]
@@ -33,7 +36,7 @@ public class PlayerController : MonoBehaviour
     public GameObject Dead_Slot;
 
     [Header("Scene Control")]
-    public float MaxcountLoadscene;
+    public float MaxcountWaitTime;
     public SkinnedMeshRenderer meshRenderer;
 
     private float lastYposition;
@@ -115,6 +118,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+
         // luôn check inputUp để tránh miss
         bool inputUp = InputManager.IsInputUp();
         if (inputUp && isCharging && !Disableplayer)
@@ -188,7 +192,7 @@ public class PlayerController : MonoBehaviour
           SetAnimatorState(isJump: true, isHold: false);
       }
      */
-
+    
     private void StartCharging()
     {
         
@@ -201,10 +205,10 @@ public class PlayerController : MonoBehaviour
 
         audioSource.PlayOneShot(SFX_Hold);
 
-        if (ReviveManager.Instance != null)
+        if (GameManager.Instance != null)
         {
             lastSafePosition = transform.position;
-            ReviveManager.Instance.RecordSafePosition(lastSafePosition);
+            GameManager.Instance.RecordSafePosition(lastSafePosition);
         }
     }
 
@@ -343,7 +347,7 @@ public class PlayerController : MonoBehaviour
                 Debug.LogError("Không tìm thấy đối tượng với tên đó!");
             }
 
-            //FindObjectOfType<Tutorial_Manager>()?.PlayerLanded();
+            FindObjectOfType<Tutorial_Manager>()?.PlayerLanded();
         }
         if (other.gameObject.CompareTag("Trap"))
         {
@@ -364,9 +368,6 @@ public class PlayerController : MonoBehaviour
             SetAnimatorState(isJump: true, isHold: false, isIdle: false);
         }
     }
-
-
-
     public void ReviveAt(Vector3 position)
     {
         // Reset vị trí
@@ -398,7 +399,12 @@ public class PlayerController : MonoBehaviour
         SetAnimatorState(isJump: false, isHold: false, isIdle: true);
 
         Debug.Log("Đã revive tại vị trí an toàn");
-        StartCoroutine(EnablePhysicsNextFrame());
+        MaxcountWaitTime = 0f;
+        loadSceneCoroutine = StartCoroutine(WaitTime(() =>
+        {
+            rb.isKinematic = false;
+            MaxcountWaitTime = 1f;
+        }));
         GameManager.Instance.is_Timing = true;
     }
 
@@ -438,8 +444,8 @@ public class PlayerController : MonoBehaviour
         PlayerSkinApplier.Instance.DisableSkin(SkinType.Outfit);
         PlayerSkinApplier.Instance.DisableSkin(SkinType.Head);
         PlayerSkinApplier.Instance.DisableSkin(SkinType.Back);
-        
-        if (ReviveManager.Instance.HasRevived())
+        /*
+        if (GameManager.Instance.HasRevived() && GameManager.Instance.LimitRevive)
         {
             if (loadSceneCoroutine == null)
             {
@@ -450,16 +456,17 @@ public class PlayerController : MonoBehaviour
                 }));
             }
         }
+        */
 
         // Gọi UI revive nếu có và hợp lệ
         //if (UIManager.Instance != null && UIManager.Instance.revivePanel != null && !Boots_Level.Instance.NoAds )
-        if (UIManager.Instance != null && UIManager.Instance.revivePanel != null)
+        if (GameManager.Instance != null && GameManager.Instance.revivePanel != null)
         {
             if (loadSceneCoroutine == null)
             {
-                loadSceneCoroutine = StartCoroutine(LoadSceneAfterDelay(() =>
+                loadSceneCoroutine = StartCoroutine(WaitTime(() =>
                 {
-                    UIManager.Instance.ShowReviveOption();
+                    GameManager.Instance.ShowReviveOption();
                     
 
 
@@ -471,7 +478,7 @@ public class PlayerController : MonoBehaviour
         {
             if (loadSceneCoroutine == null)
             {
-                loadSceneCoroutine = StartCoroutine(LoadSceneAfterDelay(() =>
+                loadSceneCoroutine = StartCoroutine(WaitTime(() =>
                 {
                     Debug.LogWarning("Không tìm thấy UIManager hoặc revivePanel - reload scene trực tiếp.");
                     GameManager.Instance.RestartLevel();
@@ -479,11 +486,6 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
-
-
-
-
     private void HandleGoalTrigger()
     {
         
@@ -497,18 +499,18 @@ public class PlayerController : MonoBehaviour
         LevelTransition.Instance.EndTransition();
         if (loadSceneCoroutine == null)
         {
-            loadSceneCoroutine = StartCoroutine(LoadSceneAfterDelay(() =>
+            loadSceneCoroutine = StartCoroutine(WaitTime(() =>
             {
                 GameManager.Instance.CompleteCheck();
             }));
         }
     }
 
-    private IEnumerator LoadSceneAfterDelay(System.Action onComplete)
+    private IEnumerator WaitTime(System.Action onComplete)
     {
         GameManager.Instance.is_Timing = false;
         float timer = 0f;
-        while (timer < MaxcountLoadscene)
+        while (timer < MaxcountWaitTime)
         {
             timer += Time.deltaTime;
             yield return null;
@@ -517,22 +519,6 @@ public class PlayerController : MonoBehaviour
         onComplete?.Invoke();
         
     }
-    
-
-    IEnumerator WailTime()
-    {
-        yield return new WaitForSeconds(1f);
-        UIManager.Instance.ShowReviveOption();
-        
-        
-    }
-
-    private IEnumerator EnablePhysicsNextFrame()
-    {
-        yield return null; // chờ 1 frame
-        rb.isKinematic = false;
-    }
-
     private void SetAnimatorState(bool? isHold = null, bool? isJump = null, bool? isIdle = null)
     {
         if (myAnimator == null) return;

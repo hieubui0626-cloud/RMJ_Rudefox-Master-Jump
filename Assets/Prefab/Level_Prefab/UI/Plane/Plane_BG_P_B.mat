@@ -26,7 +26,15 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _Main_Texture2D:
-        m_Texture: {fileID: 2800000, guid: 346d5d2bf4c1a0a41b826e22c20ba9dd, type: 3}
+        m_Texture: {fileID: 2800000, guid: da7e17ac612a007459af3e0cc40db094, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureA:
+        m_Texture: {fileID: 2800000, guid: 7934d3e75850e4640b69bf04822c84da, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureB:
+        m_Texture: {fileID: 2800000, guid: 3bd4a72ed70b76940bd1331b76a38e80, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -45,6 +53,7 @@ Material:
     m_Floats:
     - _BUILTIN_QueueControl: -1
     - _BUILTIN_QueueOffset: 0
+    - _Blend: 0
     - _Plane_BG_Metalic: 0
     - _Plane_BG_Smoothess: 0
     - _QueueControl: 0

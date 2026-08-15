@@ -1,4 +1,4 @@
-﻿using UnityEditor;
+﻿
 using UnityEngine;
 using UnityEngine.Rendering.UI;
 using UnityEngine.VFX;
@@ -20,31 +20,42 @@ public class PlayerSkinApplier : MonoBehaviour
     [SerializeField] private GameObject vfxDeadBase;
     GameObject head, back, trail, vfx_hit, vfx_dead;
 
-    
+
     void Awake() => Instance = this;
 
     void Start()
     {
-        if (trailAnchor.childCount > 0)
-        {
-            trail = trailAnchor.GetChild(0).gameObject;
-        }
+        if (trailAnchor.childCount > 0) trail = trailAnchor.GetChild(0).gameObject;
         SkinManager.Instance.OnSkinChanged += ApplyAll;
         ApplyAll();
+        Debug.Log("PlayerSkinApplier: Start() - Applied all skins.");
     }
 
     public void ApplyAll()
     {
         var db = SkinDataBase.Instance;
+        if (db == null || SkinManager.Instance == null) return;
 
-        ApplyOutfit(db.Get(SkinManager.Instance.Get(SkinType.Outfit)));
-        ApplyOptionalSkin(ref head, db.Get(SkinManager.Instance.Get(SkinType.Head))?.hatPrefab, hatAnchor);
-        ApplyOptionalSkin(ref back, db.Get(SkinManager.Instance.Get(SkinType.Back))?.backPrefab, backAnchor);
+        // 1. Outfit
+        SkinSlotData outfitSlot = db.GetSlotByID(SkinManager.Instance.Get(SkinType.Outfit));
+        ApplyOutfitSlot(outfitSlot);
 
+        // 2. Head & Back (Optional)
+        SkinSlotData headSlot = db.GetSlotByID(SkinManager.Instance.Get(SkinType.Head));
+        ApplyOptionalSkin(ref head, headSlot?.prefab, hatAnchor);
 
-        ApplyRequiredSkin(ref trail, db.Get(SkinManager.Instance.Get(SkinType.Trail))?.trailPrefab, trailBasePrefab, trailAnchor);
-        ApplyRequiredSkin(ref vfx_hit, db.Get(SkinManager.Instance.Get(SkinType.Hit))?.hitEffect_Obj, vfxHitBase, hitAnchor);
-        ApplyRequiredSkin(ref vfx_dead, db.Get(SkinManager.Instance.Get(SkinType.Dead))?.deadEffect_Obj, vfxDeadBase, deadAnchor);
+        SkinSlotData backSlot = db.GetSlotByID(SkinManager.Instance.Get(SkinType.Back));
+        ApplyOptionalSkin(ref back, backSlot?.prefab, backAnchor);
+
+        // 3. Trail & VFX (Required - có Fallback)
+        SkinSlotData trailSlot = db.GetSlotByID(SkinManager.Instance.Get(SkinType.Trail));
+        ApplyRequiredSkin(ref trail, trailSlot?.prefab, trailBasePrefab, trailAnchor);
+
+        SkinSlotData hitSlot = db.GetSlotByID(SkinManager.Instance.Get(SkinType.Hit));
+        ApplyRequiredSkin(ref vfx_hit, hitSlot?.vfxObj, vfxHitBase, hitAnchor);
+
+        SkinSlotData deadSlot = db.GetSlotByID(SkinManager.Instance.Get(SkinType.Dead));
+        ApplyRequiredSkin(ref vfx_dead, deadSlot?.vfxObj, vfxDeadBase, deadAnchor);
     }
     /*
     void ApplydeadEffect(SkinData data)
@@ -112,25 +123,21 @@ public class PlayerSkinApplier : MonoBehaviour
 
     }
     */
-    void ApplyOutfit(SkinData data)
+    private void ApplyOutfitSlot(SkinSlotData slot)
     {
-        if (data == null)
-        {
-            if (outfitRenderer != null)
-            {
-                outfitRenderer.sharedMesh = null;
-                outfitRenderer.material = null;
-                outfitRenderer.enabled = false;
-            }
-            return;
-        }
+        if (outfitRenderer == null) return;
 
-        // Apply outfit data
-        if (outfitRenderer != null)
+        if (slot != null && slot.mesh != null)
         {
             outfitRenderer.enabled = true;
-            outfitRenderer.sharedMesh = data.mesh;
-            outfitRenderer.material = data.material;
+            outfitRenderer.sharedMesh = slot.mesh;
+            outfitRenderer.material = slot.material;
+        }
+        else
+        {
+            outfitRenderer.sharedMesh = null;
+            outfitRenderer.material = null;
+            outfitRenderer.enabled = false;
         }
     }
 
@@ -167,7 +174,7 @@ public class PlayerSkinApplier : MonoBehaviour
             current = Instantiate(target, anchor);
             current.transform.localPosition = Vector3.zero;
             current.transform.localRotation = Quaternion.identity;
-            
+
             VisualEffect vfx = current.GetComponentInChildren<VisualEffect>();
             if (vfx != null)
             {
@@ -177,11 +184,27 @@ public class PlayerSkinApplier : MonoBehaviour
         }
     }
 
-    void ClearVisual(ref GameObject current, Transform anchor)
+    private void ClearVisual(ref GameObject current, Transform anchor)
     {
-        if (current != null) Destroy(current);
-        current = null;
-        foreach (Transform child in anchor) Destroy(child.gameObject);
+        // 1. Destroy and reference nullify current tracking variable
+        if (current != null)
+        {
+            Destroy(current);
+            current = null;
+        }
+
+        // 2. Safe cleanup for remaining children on the anchor
+        if (anchor != null)
+        {
+            for (int i = anchor.childCount - 1; i >= 0; i--)
+            {
+                Transform child = anchor.GetChild(i);
+                if (child != null)
+                {
+                    Destroy(child.gameObject);
+                }
+            }
+        }
     }
 
 
@@ -202,7 +225,7 @@ public class PlayerSkinApplier : MonoBehaviour
                 if (back != null)
                     back.SetActive(true);
                 break;
-            
+
         }
     }
     public void DisableSkin(SkinType type)
@@ -221,7 +244,7 @@ public class PlayerSkinApplier : MonoBehaviour
                 if (back != null)
                     back.SetActive(false);
                 break;
-            
+
         }
     }
 }

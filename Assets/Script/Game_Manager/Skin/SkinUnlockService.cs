@@ -11,7 +11,7 @@ public class SkinUnlockService
 
     // Accepts an optional completion callback so callers (UI) can refresh after unlock
     // Callback now returns a bool indicating success (true) or failure (false)
-    public void Unlock(SkinData skin, Action<bool> onComplete = null)
+    public void Unlock(SkinSlotData skin, Action<bool> onComplete = null)
     {
         if (skin == null)
         {

@@ -21,4 +21,5 @@ public enum SceneList
     W1_14,
     W1_15,
     Endless,
+    Endless_Test,
 }

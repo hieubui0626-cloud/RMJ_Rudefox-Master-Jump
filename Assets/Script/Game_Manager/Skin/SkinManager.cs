@@ -6,10 +6,10 @@ public class SkinManager : MonoBehaviour
     public static SkinManager Instance;
 
     public Dictionary<SkinType, string> equipped = new();
-    
+
 
     public System.Action OnSkinChanged;
-    
+
 
     void Awake() => Instance = this;
 
@@ -18,8 +18,9 @@ public class SkinManager : MonoBehaviour
         equipped = data;
     }
 
-    public void Equip(SkinData skin)
+    public void Equip(SkinSlotData skin)
     {
+        if (skin == null) return;
         if (!SkinInventory.Instance.IsOwned(skin.skinID))
         {
             Debug.LogWarning("Skin chưa unlock!");
@@ -33,7 +34,7 @@ public class SkinManager : MonoBehaviour
         OnSkinChanged?.Invoke();
     }
 
-    public void Unequip(SkinData skin)
+    public void Unequip(SkinSlotData skin)
     {
         if (skin == null) return;
 

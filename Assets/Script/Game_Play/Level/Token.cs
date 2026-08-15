@@ -7,8 +7,9 @@ public class Token : MonoBehaviour
         Debug.Log("+1 token");
         if (other.CompareTag("Token"))
         {
+            
             GameManager.Instance.AddToken(1); // +1 token
-            Destroy(other.gameObject);             // Xóa token khi nhặt
+            other.gameObject.SetActive(false);
 
         }
     }

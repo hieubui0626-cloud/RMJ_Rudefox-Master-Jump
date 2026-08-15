@@ -37,12 +37,13 @@ public class SkinShopUI : MonoBehaviour
             Destroy(item);
         activeItems.Clear();
 
-        var skins = database.GetSkinsByType(type);
-
-        foreach (var skin in skins)
+        foreach (var theme in database.allSkins)
         {
+            var slot = theme?.GetSlot(type);
+            if (slot == null) continue;
+
             GameObject item = Instantiate(skinUIPrefab, gridParent);
-            item.GetComponent<SkinUIElement>().Setup(skin);
+            item.GetComponent<SkinUIElement>().Setup(slot);
             activeItems.Add(item);
         }
     }

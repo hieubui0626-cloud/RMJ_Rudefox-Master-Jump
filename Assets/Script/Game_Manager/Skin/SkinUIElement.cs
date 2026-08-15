@@ -13,14 +13,14 @@ public class SkinUIElement : MonoBehaviour
     public GameObject TokenIcon;
     private SkinInventory inventory => SkinInventory.Instance;
 
-    private SkinData skinData;
+    private SkinSlotData skinData;
     private Sprite fallbackCreatedSprite;
 
     public void Awake()
     {
         // removed static Instance: there are many UI elements, don't use a single shared Instance
     }
-    public void Setup(SkinData data)
+    public void Setup(SkinSlotData data)
     {
         skinData = data;
         nameText.text = data.displayName;

@@ -1219,6 +1219,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5810968303852807277, guid: e6f128ea8086f4448b6b8e1f3c5f7d45, type: 3}
+      propertyPath: m_Intensity
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5830264591904589368, guid: e6f128ea8086f4448b6b8e1f3c5f7d45, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -1238,6 +1242,14 @@ PrefabInstance:
     - target: {fileID: 8402101831520315222, guid: e6f128ea8086f4448b6b8e1f3c5f7d45, type: 3}
       propertyPath: sceneToReset
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8812309038622116234, guid: e6f128ea8086f4448b6b8e1f3c5f7d45, type: 3}
+      propertyPath: m_Intensity
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8812309038622116234, guid: e6f128ea8086f4448b6b8e1f3c5f7d45, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -255,6 +255,7 @@ public class PlayerController : MonoBehaviour
         if (Disableplayer) return; // tránh bug gọi khi chết
 
         isCharging = false;
+        forecAmount = forecAmount * forceMultiplier; // nhân lực với hệ số
         rb.AddForce(jumpDirection * forecAmount, ForceMode.Impulse);
 
         audioSource.PlayOneShot(SFX_Jump);
@@ -289,6 +290,15 @@ public class PlayerController : MonoBehaviour
 
         SetAnimatorState(isIdle: true, isJump: false);
     }   
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Trap"))
+        {
+            HandleTrapCollision();
+            return;
+            
+        }
+    }
 
     private void OnTriggerStay(Collider other)
     {
@@ -309,9 +319,9 @@ public class PlayerController : MonoBehaviour
 
         if (other.CompareTag("Goal"))
         {
-            
             HandleGoalTrigger();
         }
+        
         
     }
     
@@ -349,11 +359,13 @@ public class PlayerController : MonoBehaviour
 
             FindObjectOfType<Tutorial_Manager>()?.PlayerLanded();
         }
+        /*
         if (other.gameObject.CompareTag("Trap"))
         {
             HandleTrapCollision();
             return;
         }
+        */
 
     }
      
@@ -441,6 +453,7 @@ public class PlayerController : MonoBehaviour
         // Tắt điều khiển và mesh
         Disableplayer = true;
         if (meshRenderer != null) meshRenderer.enabled = false;
+        rb.isKinematic = true;
         PlayerSkinApplier.Instance.DisableSkin(SkinType.Outfit);
         PlayerSkinApplier.Instance.DisableSkin(SkinType.Head);
         PlayerSkinApplier.Instance.DisableSkin(SkinType.Back);
@@ -464,8 +477,10 @@ public class PlayerController : MonoBehaviour
         {
             if (loadSceneCoroutine == null)
             {
+                MaxcountWaitTime = 1f;
                 loadSceneCoroutine = StartCoroutine(WaitTime(() =>
                 {
+                    
                     GameManager.Instance.ShowReviveOption();
                     
 
@@ -499,6 +514,7 @@ public class PlayerController : MonoBehaviour
         LevelTransition.Instance.EndTransition();
         if (loadSceneCoroutine == null)
         {
+            MaxcountWaitTime = 1f;
             loadSceneCoroutine = StartCoroutine(WaitTime(() =>
             {
                 GameManager.Instance.CompleteCheck();

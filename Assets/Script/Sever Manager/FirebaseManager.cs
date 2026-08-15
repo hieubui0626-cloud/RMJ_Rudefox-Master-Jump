@@ -5,6 +5,7 @@ using Firebase.Extensions;
 using Firebase.Auth;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public class FirebaseManager : MonoBehaviour
 {
@@ -258,8 +259,18 @@ public class FirebaseManager : MonoBehaviour
     #endregion
 
     #region SkinSystem
+    // ĐÃ SỬA: thêm guard dbRef == null (trước đây thiếu, có thể gây NullReferenceException
+    // khi Firebase chưa kết nối xong hoặc mất mạng), và lưu local (PlayerPrefs) làm fallback
+    // giống các hệ thống khác trong file này (BestTime, CompletedLevels...).
     public void SaveUnlockedSkins(List<string> unlockedList)
     {
+        if (unlockedList == null) unlockedList = new List<string>();
+
+        PlayerPrefs.SetString("UnlockedSkins", string.Join(",", unlockedList));
+        PlayerPrefs.Save();
+
+        if (dbRef == null) return;
+
         Dictionary<string, object> unlockedMap = new Dictionary<string, object>();
         foreach (var id in unlockedList)
             unlockedMap[id] = true;
@@ -268,8 +279,17 @@ public class FirebaseManager : MonoBehaviour
             .Child("skins").Child("unlocked")
             .SetValueAsync(unlockedMap);
     }
+
     public void SaveEquippedSkins(Dictionary<SkinType, string> equippedMap)
     {
+        if (equippedMap == null) equippedMap = new Dictionary<SkinType, string>();
+
+        foreach (var kv in equippedMap)
+            PlayerPrefs.SetString($"Equipped_{kv.Key}", kv.Value);
+        PlayerPrefs.Save();
+
+        if (dbRef == null) return;
+
         Dictionary<string, object> map = new Dictionary<string, object>();
         foreach (var kv in equippedMap)
             map[kv.Key.ToString()] = kv.Value;
@@ -281,6 +301,27 @@ public class FirebaseManager : MonoBehaviour
 
     public void LoadPlayerSkinData(Action<int, List<string>, Dictionary<SkinType, string>> callback)
     {
+        if (dbRef == null)
+        {
+            int cachedTokens = PlayerPrefs.GetInt("CachedTokens", 0);
+
+            List<string> unlocked = new List<string>();
+            string cache = PlayerPrefs.GetString("UnlockedSkins", "");
+            if (!string.IsNullOrEmpty(cache))
+                unlocked = cache.Split(',').Where(s => !string.IsNullOrEmpty(s)).ToList();
+
+            Dictionary<SkinType, string> equipped = new Dictionary<SkinType, string>();
+            foreach (SkinType type in Enum.GetValues(typeof(SkinType)))
+            {
+                string key = $"Equipped_{type}";
+                if (PlayerPrefs.HasKey(key))
+                    equipped[type] = PlayerPrefs.GetString(key);
+            }
+
+            callback(cachedTokens, unlocked, equipped);
+            return;
+        }
+
         dbRef.Child("players").Child(PlayerId).GetValueAsync().ContinueWithOnMainThread(task =>
         {
             if (task.IsCompleted && !task.IsFaulted)

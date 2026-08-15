@@ -22,7 +22,8 @@ public class EndlessBiomeBlender : MonoBehaviour
     public Renderer textureRenderer;
 
     [Header("Color Material")]
-    public Material colorMaterial;
+    public Material colorMaterial_Ground;
+    public Material colorMaterial_BG;
 
     [Header("Biome Settings")]
     [Min(1)]
@@ -114,7 +115,7 @@ public class EndlessBiomeBlender : MonoBehaviour
 
     private void UpdateColorSystem()
     {
-        if (colorMaterial == null)
+        if (colorMaterial_Ground == null || colorMaterial_BG == null)
             return;
 
         if (colorBiomes.Count < 2)
@@ -136,12 +137,20 @@ public class EndlessBiomeBlender : MonoBehaviour
 
         if (currentBiome != lastColorBiome)
         {
-            colorMaterial.SetColor(
+            colorMaterial_Ground.SetColor(
                 "_ColorA",
                 colorBiomes[currentBiome].color);
 
-            colorMaterial.SetColor(
+            colorMaterial_Ground.SetColor(
                 "_ColorB",
+                colorBiomes[nextBiome].color);
+
+            
+            colorMaterial_BG.SetColor(
+                "_Par_Color_A",
+                colorBiomes[currentBiome].color);
+            colorMaterial_BG.SetColor(
+                "_Par_Color_B",
                 colorBiomes[nextBiome].color);
 
             lastColorBiome = currentBiome;
@@ -156,7 +165,8 @@ public class EndlessBiomeBlender : MonoBehaviour
                 biomeHeight,
                 localHeight);
 
-        colorMaterial.SetFloat("_Blend", blend);
+        colorMaterial_Ground.SetFloat("_Blend", blend);
+        colorMaterial_BG.SetFloat("_Blend", blend);
     }
 
     #endregion

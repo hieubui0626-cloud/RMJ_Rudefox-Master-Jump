@@ -51,6 +51,8 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI Heightest_Player; // Gán UI để hiển thị high score
     public Transform playerTransform; // Gán Transform của Player để theo dõi chiều cao
 
+    private bool isSavingRun = false;
+
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -59,7 +61,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-
+        isSavingRun = false;
         forceText.gameObject.SetActive(false);
         mainCamera = Camera.main;
         if (Campaign)
@@ -356,53 +358,37 @@ public class GameManager : MonoBehaviour
 
     public void SceneUndo()
     {
+        if (isSavingRun) return;
+        isSavingRun = true;
         string undoaddress = sceneToUndo.ToString();
         Addressables.LoadSceneAsync(undoaddress, LoadSceneMode.Single, true);
-        //SceneManager.LoadScene(sceneToReset.ToString());
+
         if (!Campaign)
         {
+            int amountToAdd = currentLevelTokens;
+            currentLevelTokens = 0;      // reset ngay, tránh bị đọc lại lần 2
+            UpdateTokenUI();
+
             float currentHeight = currentHeightest;
             if (FirebaseManager.Instance != null)
             {
                 FirebaseManager.Instance.LoadBestHeight(sceneToReset.ToString(), oldBest =>
                 {
                     if (oldBest < 0 || currentHeight > oldBest)
-                    {
                         FirebaseManager.Instance.SaveBestHeight(sceneToReset.ToString(), currentHeight);
-                    }
-                });
-                FirebaseManager.Instance.GetTotalTokens(total =>
-                {
-                    int oldTotal = total;
-                    int newTotal = total + currentLevelTokens;
-
-                    // Animate số token tăng (chỉ hiển thị, chưa lưu Firebase)
-                    StartCoroutine(AnimateTokenCount(oldTotal, newTotal));
-
-                    Debug.Log($"🔔 Hiển thị cộng {currentLevelTokens} token (chưa lưu).");
                 });
 
-                int amountToAdd = currentLevelTokens;
                 FirebaseManager.Instance.UpdateTotalTokens(amountToAdd, newTotal =>
                 {
                     Debug.Log($"✅ Đã lưu {amountToAdd} token, tổng mới = {newTotal}");
-
-                    // Reset lại token tạm
-                    currentLevelTokens = 0;
-                    UpdateTokenUI();
-
-
                 });
             }
             else
             {
                 PlayerPrefs.SetFloat(sceneToReset.ToString() + "_BestHeight", currentHeight);
                 int oldTotal = PlayerPrefs.GetInt("TotalTokens", 0);
-                int newTotal = oldTotal + currentLevelTokens;
-                PlayerPrefs.SetInt("TotalTokens", newTotal);
-                UpdateTokenUI();
+                PlayerPrefs.SetInt("TotalTokens", oldTotal + amountToAdd);
             }
-
         }
 
     }

@@ -141,9 +141,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76e11fdb36207ea498480ee3b5fd95d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxForce: 8
+  maxForce: 10
   DistanveDivide: 20
-  forceMultiplier: 1
+  forceMultiplier: 0.8
   targetForce: 0
   forecAmount: 0
   GroundCountTime: 0
@@ -158,7 +158,7 @@ MonoBehaviour:
   lineRenderer: {fileID: 6939452528599648876}
   Hit_Slot: {fileID: 1376091059459468260}
   Dead_Slot: {fileID: 7042367043665103333}
-  MaxcountLoadscene: 0
+  MaxcountWaitTime: 0
   meshRenderer: {fileID: 0}
   forceLerpSpeed: 10
   minDragDistance: 1

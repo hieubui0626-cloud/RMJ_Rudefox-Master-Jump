@@ -11,13 +11,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Scene_Menu/Login_Scene.unity
     guid: 1576fa0546e148e4b9fffb284d514a2a
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Scene_Menu/Main_Menu.unity
     guid: 299d7993d206ab448bd91c462ee8cdaa
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Scene_Menu/Level_Map.unity
     guid: 851823c796c97a048aae6303f9349b85
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Scene_Level/Endless/Endless.unity
     guid: c425b5d7c424eff439dc0ac58987415d
   m_configObjects:

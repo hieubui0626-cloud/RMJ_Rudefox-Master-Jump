@@ -179,10 +179,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1948531752416904980, guid: 1f5e75fd18b72474ebb663565881016d, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3308188785069821931, guid: 1f5e75fd18b72474ebb663565881016d, type: 3}
       propertyPath: maxForce
       value: 10
@@ -219,17 +215,9 @@ PrefabInstance:
       propertyPath: MaxcountLoadscene
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 3990132502583964790, guid: 1f5e75fd18b72474ebb663565881016d, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.55
-      objectReference: {fileID: 0}
     - target: {fileID: 4683315149118589335, guid: 1f5e75fd18b72474ebb663565881016d, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 6757564498005181986, guid: 1f5e75fd18b72474ebb663565881016d, type: 3}
-      propertyPath: m_Enabled
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6939452528599648876, guid: 1f5e75fd18b72474ebb663565881016d, type: 3}
       propertyPath: m_Enabled
@@ -439,8 +427,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layoutToken: {fileID: 0}
   difficultySetup:
-  - difficultyType: Normal
+  - difficultyType: Easy
     startFloor: 0
+    endFloor: 0
+    isInfinite: 0
+    prefabs:
+    - {fileID: 8612488383793144090, guid: b2efc4c18ffdf8b41a8c251bdf739ade, type: 3}
+    NumberTokenSpawn: 10
+  - difficultyType: Normal
+    startFloor: 1
     endFloor: 5
     isInfinite: 0
     prefabs:
@@ -448,14 +443,6 @@ MonoBehaviour:
     - {fileID: 5817591879439094749, guid: ab02701f131fdeb4cb57ded7243e5c09, type: 3}
     - {fileID: 8214422838364195425, guid: bc654c3f4a6421c4abc989f6f0869c59, type: 3}
     NumberTokenSpawn: 21
-  - difficultyType: Advance
-    startFloor: 3
-    endFloor: 0
-    isInfinite: 0
-    prefabs:
-    - {fileID: 8612488383793144090, guid: f76cad08e2506d84094bf1ea2e62de8e, type: 3}
-    - {fileID: 8612488383793144090, guid: fd3e0bf5855c4cd4dafb8cd755eaa4db, type: 3}
-    NumberTokenSpawn: 30
   defaultRoomPrefabs:
   - {fileID: 8612488383793144090, guid: cc4501d648c0fed4f90ed7770e68eae0, type: 3}
   - {fileID: 5817591879439094749, guid: ab02701f131fdeb4cb57ded7243e5c09, type: 3}
@@ -464,7 +451,7 @@ MonoBehaviour:
   cameraTransform: {fileID: 0}
   killZoneTransform: {fileID: 1994253833}
   roomHeight: 60
-  killZoneOffset: 30
+  killZoneOffset: 60
 --- !u!114 &1404706776
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -479,8 +466,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 252497614}
   textureRenderer: {fileID: 1528723569}
-  colorMaterial_Ground: {fileID: 2100000, guid: 7bbbe09797b4f2e4093855f45f0a5d88, type: 2}
-  colorMaterial_BG: {fileID: 2100000, guid: 66d538d6903bff04786d3a627a137148, type: 2}
+  colorMaterial: {fileID: 2100000, guid: 7bbbe09797b4f2e4093855f45f0a5d88, type: 2}
   biomeHeight: 120
   blendRange: 30
   textureBiomes:
@@ -529,7 +515,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 23.556871, y: 110.5}
+  m_AnchoredPosition: {x: 15.5, y: 110.5}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1411438774
@@ -552,7 +538,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Best Height
+  m_text: Time
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -587,7 +573,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 2
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 512
+  m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -868,7 +854,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9080829576553759253, guid: ac9ae098b0dd26d428343aa0339529f2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -10
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 9080829576553759253, guid: ac9ae098b0dd26d428343aa0339529f2, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1008,10 +994,6 @@ PrefabInstance:
     - target: {fileID: 3802451705709218046, guid: e6f128ea8086f4448b6b8e1f3c5f7d45, type: 3}
       propertyPath: sceneToLoad
       value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 3869573897067177682, guid: e6f128ea8086f4448b6b8e1f3c5f7d45, type: 3}
-      propertyPath: m_text
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3869573897067177682, guid: e6f128ea8086f4448b6b8e1f3c5f7d45, type: 3}
       propertyPath: m_margin.w

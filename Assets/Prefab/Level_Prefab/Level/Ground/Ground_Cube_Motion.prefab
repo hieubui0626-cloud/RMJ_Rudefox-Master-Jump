@@ -59,7 +59,7 @@ PrefabInstance:
     - target: {fileID: 3592686283671237376, guid: 17f642d20673e33409a9baba38b82138, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 7bbbe09797b4f2e4093855f45f0a5d88, type: 2}
+      objectReference: {fileID: 2100000, guid: 544610c999fe5af4e90303ba3e4176c7, type: 2}
     - target: {fileID: -7511558181221131132, guid: 79f441057a1fe144f97abad3571ee456, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -72,9 +72,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3088120604001030869, guid: 17f642d20673e33409a9baba38b82138, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1739867374023366224}
-    - targetCorrespondingSourceObject: {fileID: 3088120604001030869, guid: 17f642d20673e33409a9baba38b82138, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1571734262186541071}
   m_SourcePrefab: {fileID: 100100000, guid: 17f642d20673e33409a9baba38b82138, type: 3}
 --- !u!1 &8231889805980065846 stripped
 GameObject:
@@ -102,26 +99,3 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.021, y: 0.021, z: 0.021}
   m_Center: {x: 0, y: 9.313226e-10, z: 0.0000000018626451}
---- !u!114 &1571734262186541071
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8231889805980065846}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbb5770eb98f24f4a8b83efb710f4013, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Object_Animated
-  movingPingPongLength: 1
-  movingSpeed: 0.75
-  rotationSpeed: 50
-  Maximum_Angles: 0
-  moveBackground: 0
-  moveGround: 1
-  rotate: 0
-  rotateWheel: 0
-  rotatePingPong: 0
-  moveX: 0
-  moveY: 0

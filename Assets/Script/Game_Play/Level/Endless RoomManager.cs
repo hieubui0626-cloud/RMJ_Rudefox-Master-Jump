@@ -76,14 +76,14 @@ public class RoomManager : MonoBehaviour
         if (playerTransform == null) return;
 
         // Tính toán xem Player đang ở tầng (Floor) thứ mấy dựa trên trục Y
-        int currentPlayerFloor = Mathf.Max(0, Mathf.FloorToInt(playerTransform.position.y / roomHeight));
+        int currentPlayerFloor = Mathf.FloorToInt(playerTransform.position.y / roomHeight);
 
         // Nếu Player đổi tầng (nhảy lên hoặc rơi xuống), cập nhật lại trạng thái các Room và Vị trí Kill Zone
         if (currentPlayerFloor != lastPlayerFloor)
         {
             lastPlayerFloor = currentPlayerFloor;
             UpdateRooms(currentPlayerFloor);
-            UpdateKillZonePosition(currentPlayerFloor);
+            UpdateKillZonePosition();
         }
     }
 
@@ -288,16 +288,13 @@ public class RoomManager : MonoBehaviour
     /// Cập nhật vị trí của Kill Zone dựa trên điểm cao nhất Player đã đạt được (currentHeightest),
     /// trừ đi một khoảng đệm để tránh chết đột ngột khi vừa chạm mép dưới vùng hiển thị.
     /// </summary>
-    void UpdateKillZonePosition(int currentFloor)
+    void UpdateKillZonePosition()
     {
         if (killZoneTransform == null) return;
         if (GameManager.Instance == null) return;
 
-        // Tầng thấp nhất đang hiển thị (không bao giờ âm)
-        int lowestActiveFloor = Mathf.Max(0, currentFloor - 1);
-
-        // Bám theo tầng thấp nhất đang active thay vì currentHeightest
-        float killZoneY = (lowestActiveFloor * roomHeight) - 3f; // đệm nhỏ để không giết player ngay khi vừa chạm mép
+        float playerHeightestY = GameManager.Instance.currentHeightest;
+        float killZoneY = playerHeightestY - killZoneOffset;
 
         Vector3 newKillZonePos = killZoneTransform.position;
         newKillZonePos.y = killZoneY;

@@ -16,6 +16,8 @@ public class Object_Animated : MonoBehaviour
     public bool rotate;
     public bool rotateWheel;
     public bool rotatePingPong;
+    public bool rotateY;
+
     public bool moveX;
     public bool moveY;
 
@@ -49,6 +51,8 @@ public class Object_Animated : MonoBehaviour
 
         if (rotatePingPong)
             RotatePingPong();
+        if(rotateY)
+            RotateY();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -112,5 +116,12 @@ public class Object_Animated : MonoBehaviour
 
         float angle = Mathf.Sin(Time.time * rotationSpeed) * Maximum_Angles;
         transform.rotation = Quaternion.Euler(0f, 0f, angle);
+    }
+    private void RotateY()
+    {
+
+        yRotation += rotationSpeed * Time.deltaTime;
+        yRotation = Mathf.Repeat(yRotation, 360f); // reset sau mỗi 360 độ
+        transform.rotation = Quaternion.Euler(0f, yRotation, 0f);
     }
 }

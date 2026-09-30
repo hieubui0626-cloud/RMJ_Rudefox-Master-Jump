@@ -46,7 +46,7 @@ Material:
     - _Smoothness: 0.51
     - _XRMotionVectorsPass: 1
     m_Colors:
-    - _ColorA: {r: 1, g: 0.5113207, b: 0.99431777, a: 0}
+    - _ColorA: {r: 0.8555873, g: 0.5331648, b: 0.86415094, a: 0}
     - _ColorB: {r: 1, g: 0.6957656, b: 0.4660377, a: 0}
     - _Main_Color: {r: 0.98039216, g: 0.6039216, b: 0.9764706, a: 0}
     - _Press_Button_Color: {r: 0.9811321, g: 0.60534, b: 0.97580165, a: 0}

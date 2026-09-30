@@ -21,7 +21,7 @@ MonoBehaviour:
     icon: {fileID: -453482977, guid: 2c94b0cf3d442c146b8b75c6ba6d106c, type: 3}
     mesh: {fileID: 0}
     material: {fileID: 0}
-    prefab: {fileID: 2955452250229399962, guid: 1459583c61ee31a40a8e3c51013f3113, type: 3}
+    prefab: {fileID: 2937633940405336034, guid: e37f6ea7f74de344f9ac3c942ea1cb7f, type: 3}
     vfxObj: {fileID: 0}
   - skinID: Badly_Dressed_Ghost_Hat_9_2026
     type: 1
@@ -30,15 +30,15 @@ MonoBehaviour:
     icon: {fileID: 2034888465, guid: 9b25c35872c9ecd46a0bbe930a584d44, type: 3}
     mesh: {fileID: 0}
     material: {fileID: 0}
-    prefab: {fileID: 5964077842343039288, guid: 82ccd4eec5cfb8542ae7d8f9cd761702, type: 3}
+    prefab: {fileID: 6264348321599027329, guid: 3adca9acf24248448935e6323551487f, type: 3}
     vfxObj: {fileID: 0}
   - skinID: Badly_Dressed_Ghost_Outfit_9_2026
     type: 0
     displayName: The Shroud of Badly Dressed Ghost
     cost: 2000
     icon: {fileID: -1855211143, guid: 608c280daead287439ceca7b9ff9c917, type: 3}
-    mesh: {fileID: -3585066455728854936, guid: 8c3ce9a70816ba44bad8ca78281e663c, type: 3}
-    material: {fileID: 2100000, guid: 3ddbb3476066dae4885532fb58602e59, type: 2}
+    mesh: {fileID: -3585066455728854936, guid: ee824e532eb6e5b4ab475d2ff0ad7d04, type: 3}
+    material: {fileID: 2100000, guid: ab5d1d1220217ce4685f806e078102c8, type: 2}
     prefab: {fileID: 0}
     vfxObj: {fileID: 0}
   - skinID: Badly_Dressed_Ghost_Trail_9_2026

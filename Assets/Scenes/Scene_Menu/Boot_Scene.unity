@@ -1293,6 +1293,7 @@ MonoBehaviour:
   skinFolderPath: Assets/Game/Skins
   allSkins:
   - {fileID: 11400000, guid: dcc632365688af54798a49b97eb2ceae, type: 2}
+  - {fileID: 11400000, guid: 9f47467a3a974e345b44e9055e821915, type: 2}
 --- !u!1 &1341626244
 GameObject:
   m_ObjectHideFlags: 0

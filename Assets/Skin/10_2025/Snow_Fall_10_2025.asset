@@ -38,7 +38,7 @@ MonoBehaviour:
     cost: 2000
     icon: {fileID: -1335281371, guid: b996518e743ac2e49800c279637e3899, type: 3}
     mesh: {fileID: -4436584396620097087, guid: df24dba3b46415747bb91a0ad6c189dc, type: 3}
-    material: {fileID: 2100000, guid: 3ddbb3476066dae4885532fb58602e59, type: 2}
+    material: {fileID: -876546973899608171, guid: acebf206d0f61ae4383690fece4e24af, type: 3}
     prefab: {fileID: 0}
     vfxObj: {fileID: 0}
   - skinID: Snow_Fall_Trail_10_2025

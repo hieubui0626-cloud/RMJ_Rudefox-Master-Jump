@@ -28,7 +28,25 @@ public class SkinShopUI : MonoBehaviour
         backTabButton.onClick.AddListener(() => PopulateShopByType(SkinType.Back));
         trailTabButton.onClick.AddListener(() => PopulateShopByType(SkinType.Trail));
 
+        if (SkinManager.Instance != null)
+            SkinManager.Instance.OnSkinChanged += RefreshAllItems;
+
         PopulateShopByType(SkinType.Outfit);
+    }
+
+    private void OnDestroy()
+    {
+        if (SkinManager.Instance != null)
+            SkinManager.Instance.OnSkinChanged -= RefreshAllItems;
+    }
+
+    private void RefreshAllItems()
+    {
+        foreach (var item in activeItems)
+        {
+            if (item != null)
+                item.GetComponent<SkinUIElement>().RefreshState();
+        }
     }
 
     public void PopulateShopByType(SkinType type)

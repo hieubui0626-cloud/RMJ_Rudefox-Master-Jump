@@ -56,6 +56,7 @@ MonoBehaviour:
   rotate: 1
   rotateWheel: 0
   rotatePingPong: 0
+  rotateY: 0
   moveX: 0
   moveY: 0
 --- !u!23 &5916052200150339357
@@ -81,7 +82,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 809aef73723c3b04ab09b1969c96da58, type: 2}
+  - {fileID: -876546973899608171, guid: acebf206d0f61ae4383690fece4e24af, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

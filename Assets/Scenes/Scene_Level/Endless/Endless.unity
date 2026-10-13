@@ -466,7 +466,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 252497614}
   textureRenderer: {fileID: 1528723569}
-  colorMaterial: {fileID: 2100000, guid: 7bbbe09797b4f2e4093855f45f0a5d88, type: 2}
+  colorMaterial_Ground: {fileID: 2100000, guid: 7bbbe09797b4f2e4093855f45f0a5d88, type: 2}
+  colorMaterial_BG: {fileID: 2100000, guid: 66d538d6903bff04786d3a627a137148, type: 2}
   biomeHeight: 120
   blendRange: 30
   textureBiomes:

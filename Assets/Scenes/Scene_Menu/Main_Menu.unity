@@ -4357,16 +4357,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1226116801}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 76d7a8123ca45e34fbb886c871e75557, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skins:
-  - {fileID: 11400000, guid: b00208ddb8fdd4e4da35323ade3719f6, type: 2}
-  - {fileID: 11400000, guid: a5fce82e8c33fec42a0293ecc9a947ac, type: 2}
-  - {fileID: 11400000, guid: 28103851fec061a4ea27d923dde81728, type: 2}
-  - {fileID: 11400000, guid: 4bb634ffe6a13df45866c71171c2cec6, type: 2}
+  skinFolderPath: Assets/Game/Skins
+  allSkins:
+  - {fileID: 11400000, guid: 9f47467a3a974e345b44e9055e821915, type: 2}
+  - {fileID: 11400000, guid: dcc632365688af54798a49b97eb2ceae, type: 2}
 --- !u!4 &1226116803
 Transform:
   m_ObjectHideFlags: 0
@@ -4419,7 +4418,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   openShopOnStart: 0
-  openShopType: 0
+  openShopType: 1
 --- !u!1001 &1237265210
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7075,6 +7074,7 @@ MonoBehaviour:
   StoreDisableObjects:
   - {fileID: 1302654669}
   - {fileID: 2002138865}
+  - {fileID: 610727779}
   posBase: {x: 0, y: 1, z: -6}
   posZoom: {x: 1.75, y: -0.5, z: -2}
 --- !u!114 &1625222655

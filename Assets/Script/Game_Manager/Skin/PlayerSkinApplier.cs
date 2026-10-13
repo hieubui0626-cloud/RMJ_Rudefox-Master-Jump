@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.Rendering.UI;
 using UnityEngine.VFX;
+using System.Collections.Generic;
 
 public class PlayerSkinApplier : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class PlayerSkinApplier : MonoBehaviour
     public Transform trailAnchor;
     public Transform hitAnchor;
     public Transform deadAnchor;
+
+    private readonly Dictionary<Transform, GameObject> appliedPrefabs = new();
 
     [SerializeField] private GameObject trailBasePrefab;
     [SerializeField] private GameObject vfxHitBase;
@@ -168,43 +171,40 @@ public class PlayerSkinApplier : MonoBehaviour
     // Hàm bổ trợ để tránh lặp code (Helper methods)
     void UpdateVisual(ref GameObject current, GameObject target, Transform anchor)
     {
-        if (current == null || current.name != target.name + "(Clone)")
-        {
-            ClearVisual(ref current, anchor);
-            current = Instantiate(target, anchor);
-            current.transform.localPosition = Vector3.zero;
-            current.transform.localRotation = Quaternion.identity;
+        // Cùng prefab đang áp dụng thì bỏ qua
+        if (current != null && appliedPrefabs.TryGetValue(anchor, out var applied) && applied == target)
+            return;
 
-            VisualEffect vfx = current.GetComponentInChildren<VisualEffect>();
-            if (vfx != null)
-            {
-                vfx.enabled = true; // Đảm bảo component được bật
-                vfx.Play();         // Ép hiệu ứng bắt đầu chạy
-            }
+        ClearVisual(ref current, anchor);
+
+        // Sinh ra đúng vị trí/rotation của anchor ngay từ đầu
+        current = Instantiate(target, anchor.position, anchor.rotation, anchor);
+        current.transform.localPosition = Vector3.zero;
+        current.transform.localRotation = Quaternion.identity;
+        appliedPrefabs[anchor] = target;
+
+        // Xoá dữ liệu vệt/particle sinh ra ở vị trí cũ
+        foreach (var tr in current.GetComponentsInChildren<TrailRenderer>(true)) tr.Clear();
+        foreach (var ps in current.GetComponentsInChildren<ParticleSystem>(true)) { ps.Clear(true); ps.Play(true); }
+        foreach (var vfx in current.GetComponentsInChildren<VisualEffect>(true))
+        {
+            vfx.enabled = true;
+            vfx.Reinit();
+            vfx.Play();
         }
     }
 
-    private void ClearVisual(ref GameObject current, Transform anchor)
+    void ClearVisual(ref GameObject current, Transform anchor)
     {
-        // 1. Destroy and reference nullify current tracking variable
-        if (current != null)
+        // Gỡ khỏi anchor ngay lập tức, không chờ cuối frame
+        for (int i = anchor.childCount - 1; i >= 0; i--)
         {
-            Destroy(current);
-            current = null;
+            var child = anchor.GetChild(i);
+            child.SetParent(null);
+            Destroy(child.gameObject);
         }
-
-        // 2. Safe cleanup for remaining children on the anchor
-        if (anchor != null)
-        {
-            for (int i = anchor.childCount - 1; i >= 0; i--)
-            {
-                Transform child = anchor.GetChild(i);
-                if (child != null)
-                {
-                    Destroy(child.gameObject);
-                }
-            }
-        }
+        current = null;
+        appliedPrefabs.Remove(anchor);
     }
 
 

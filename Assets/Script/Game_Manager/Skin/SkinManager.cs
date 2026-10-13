@@ -38,11 +38,15 @@ public class SkinManager : MonoBehaviour
     {
         if (skin == null) return;
 
-        if (equipped.ContainsKey(skin.type))
-            equipped.Remove(skin.type);
+        if (!equipped.TryGetValue(skin.type, out var currentId) || currentId != skin.skinID)
+            return;
+
+        equipped.Remove(skin.type);
+
 
         SkinPersistence.Instance.SaveEquipped(equipped);
-
+        PlayerPrefs.DeleteKey($"Equipped_{skin.type}"); // tránh cache local còn giữ skin đã gỡ
+        PlayerPrefs.Save();
         OnSkinChanged?.Invoke();
     }
     public string Get(SkinType type)

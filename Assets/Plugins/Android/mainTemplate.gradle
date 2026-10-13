@@ -1,4 +1,4 @@
-apply plugin: 'com.android.library'
+﻿apply plugin: 'com.android.library'
 apply from: '../shared/keepUnitySymbols.gradle'
 **APPLY_PLUGINS**
 
@@ -30,7 +30,15 @@ dependencies {
     implementation 'com.google.signin:google-signin-support:1.0.4' // Assets/GoogleSignIn/Editor/GoogleSignInSupportDependencies.xml:9
     implementation 'com.unity3d.ads:unity-ads:[4.16.3,4.17[' // Packages/com.unity.ads/Editor/Source/Dependencies.xml:7
 // Android Resolver Dependencies End
-**DEPS**}
+**DEPS**
+
+    // THÊM ĐOẠN NÀY VÀO ĐÂY:
+    constraints {
+        implementation("androidx.fragment:fragment:1.2.5") {
+            because("Google Play Console flagged version 1.1.0 as outdated")
+        }
+    }
+}
 
 // Android Resolver Exclusions Start
 android {

@@ -705,6 +705,8 @@ MonoBehaviour:
   realRewardId_IOS: ca-app-pub-2045503601876077/8696509322
   realBannerId_Android: ca-app-pub-2045503601876077/2561716204
   realBannerId_IOS: ca-app-pub-2045503601876077/8696509322
+  realRewardInterId_Android: ca-app-pub-2045503601876077/1002950197
+  realRewardInterId_IOS: "D\xC1N_ID_ADMOB_IOS_V\xC0O_\u0110\xC2Y"
 --- !u!114 &894504348
 MonoBehaviour:
   m_ObjectHideFlags: 0

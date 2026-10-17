@@ -26,6 +26,8 @@ public class Ads_Manager : MonoBehaviour
     public string realRewardId_Android = "ca-app-pub-2045503601876077/7855506189";
     public string realRewardId_IOS = "ca-app-pub-2045503601876077/8696509322";
 
+    private RewardedAd rewardedAd;
+
 
 
     // Test IDs
@@ -40,6 +42,16 @@ public class Ads_Manager : MonoBehaviour
 
     private BannerView bannerView;
 
+    // ===== Rewarded Interstitial =====
+    private string testRewardInterId_Android = "ca-app-pub-3940256099942544/5354046379";
+    private string testRewardInterId_IOS = "ca-app-pub-3940256099942544/6978759866";
+
+    [Header("Real Rewarded Interstitial Ad Unit IDs")]
+    public string realRewardInterId_Android = "DÁN_ID_ADMOB_ANDROID_VÀO_ĐÂY";
+    public string realRewardInterId_IOS = "DÁN_ID_ADMOB_IOS_VÀO_ĐÂY";
+
+    private RewardedInterstitialAd rewardedInterstitialAd;
+    private bool isShowingRewardInter = false;
     private string GetBannerAdUnitId()
     {
 #if UNITY_ANDROID
@@ -62,8 +74,19 @@ public class Ads_Manager : MonoBehaviour
 #endif
     }
 
+    private string GetRewardInterAdUnitId()
+    {
+#if UNITY_ANDROID
+        return useTestAds ? testRewardInterId_Android : realRewardInterId_Android;
+#elif UNITY_IOS
+    return useTestAds ? testRewardInterId_IOS : realRewardInterId_IOS;
+#else
+    return "unexpected_platform";
+#endif
+    }
 
-    private RewardedAd rewardedAd;
+
+    
 
     private void Awake()
     {
@@ -83,16 +106,14 @@ public class Ads_Manager : MonoBehaviour
 
     private void Start()
     {
+        MobileAds.RaiseAdEventsOnUnityMainThread = true;
+
         MobileAds.Initialize(initStatus =>
         {
             Debug.Log("[AdManager] Google Mobile Ads SDK initialized");
             LoadRewardAd();
-            
+            LoadRewardInterstitialAd();
             ads_Active = true;
-
-            
-
-
         });
     }
     #region Test
@@ -202,6 +223,68 @@ public class Ads_Manager : MonoBehaviour
     public void HideBanner()
     {
         bannerView?.Hide();
+    }
+    #endregion
+    #region Rewarded Interstitial
+    public void LoadRewardInterstitialAd()
+    {
+        if (rewardedInterstitialAd != null)
+        {
+            rewardedInterstitialAd.Destroy();
+            rewardedInterstitialAd = null;
+        }
+
+        Debug.Log("[AdManager] Loading rewarded interstitial ad...");
+        RewardedInterstitialAd.Load(GetRewardInterAdUnitId(), new AdRequest(),
+            (RewardedInterstitialAd ad, LoadAdError error) =>
+            {
+                if (error != null || ad == null)
+                {
+                    Debug.LogError("[AdManager] Failed to load rewarded interstitial: " + error);
+                    return;
+                }
+                rewardedInterstitialAd = ad;
+                Debug.Log("[AdManager] Rewarded interstitial loaded.");
+            });
+    }
+
+    public bool IsRewardInterstitialReady() => rewardedInterstitialAd != null && rewardedInterstitialAd.CanShowAd();
+
+    /// onRewardEarned: người chơi xem đủ -> nhận thưởng
+    /// onFinished: luôn được gọi khi ad đóng / lỗi / chưa sẵn sàng (để tiếp tục restart)
+    public void ShowRewardInterstitialAd(Action onRewardEarned, Action onFinished)
+    {
+        if (isShowingRewardInter) return;
+
+        if (!IsRewardInterstitialReady())
+        {
+            Debug.LogWarning("[AdManager] Rewarded interstitial not ready.");
+            LoadRewardInterstitialAd();
+            onFinished?.Invoke();
+            return;
+        }
+
+        isShowingRewardInter = true;
+
+        rewardedInterstitialAd.OnAdFullScreenContentClosed += () =>
+        {
+            isShowingRewardInter = false;
+            LoadRewardInterstitialAd();
+            onFinished?.Invoke();
+        };
+        rewardedInterstitialAd.OnAdFullScreenContentFailed += (AdError error) =>
+        {
+            Debug.LogWarning("[AdManager] Rewarded interstitial failed to show: " + error);
+            isShowingRewardInter = false;
+            LoadRewardInterstitialAd();
+            onFinished?.Invoke();
+        };
+
+        rewardedInterstitialAd.Show((Reward reward) =>
+        {
+            Debug.Log($"[AdManager] Interstitial reward: {reward.Type} - {reward.Amount}");
+            onRewardEarned?.Invoke();
+        });
     }
     #endregion
 }

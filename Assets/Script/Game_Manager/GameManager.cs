@@ -51,6 +51,11 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI Heightest_Player; // Gán UI để hiển thị high score
     public Transform playerTransform; // Gán Transform của Player để theo dõi chiều cao
 
+    [Header("Endless Interstitial")]
+    public int restartsPerAd = 3;
+    public int rewardInterstitialTokens = 5;      // token thưởng khi xem xong
+    private static int endlessRestartCount = 0;   // static để không mất khi reload scene
+
     private bool isSavingRun = false;
 
     private void Awake()
@@ -292,12 +297,38 @@ public class GameManager : MonoBehaviour
             totalTokenText.text = to.ToString();
     }
     #endregion
-    
+
 
     #region LEVEL CONTROL
 
     // ================= LEVEL CONTROL =================
+
     public void RestartLevel()
+    {
+        if (!Campaign)
+        {
+            endlessRestartCount++;
+
+            if (endlessRestartCount >= restartsPerAd)
+            {
+                endlessRestartCount = 0;
+
+                bool useGoogleAds = Boots_Level.Instance == null || !Boots_Level.Instance.NoAds
+                                    && !Boots_Level.Instance.Replace_GGAds_by_UnityAds;
+
+                if (useGoogleAds && Ads_Manager.Instance != null && Ads_Manager.Instance.ads_Active)
+                {
+                    Ads_Manager.Instance.ShowRewardInterstitialAd(
+                        () => { currentLevelTokens += rewardInterstitialTokens; }, // thưởng, sẽ được lưu trong DoRestartLevel
+                        () => DoRestartLevel());
+                    return;
+                }
+            }
+        }
+
+        DoRestartLevel();
+    }
+    public void DoRestartLevel()
     {
         string address = sceneToReset.ToString();
         Addressables.LoadSceneAsync(address, LoadSceneMode.Single, true);
